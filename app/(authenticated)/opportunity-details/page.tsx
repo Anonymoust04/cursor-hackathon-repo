@@ -2,7 +2,6 @@ import { getProjectById } from '@/lib/db/projects';
 import { fallbackOpportunities } from '@/lib/mock-data';
 import JobTabs from './JobTabs';
 import GoogleMap from '@/components/GoogleMap';
-import CompanyLogo from './CompanyLogo';
 
 export default async function OpportunityDetailsPage({
   searchParams,
@@ -73,13 +72,6 @@ export default async function OpportunityDetailsPage({
             style={{ backgroundImage: `linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 40%), url("${displayJob.image_url}")` }}
           >
             <div className="flex items-end p-6 gap-4">
-              <div className="flex items-center justify-center size-16 bg-white rounded-lg p-2">
-                <CompanyLogo 
-                  alt={`${displayJob.company} Logo`} 
-                  className="h-full w-full object-contain" 
-                  src={displayJob.company_logo_url}
-                />
-              </div>
               <div>
                 <h1 className="text-white tracking-tight text-3xl font-bold leading-tight">{displayJob.title}</h1>
                 <p className="text-white/90 text-lg">{displayJob.company}</p>
