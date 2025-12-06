@@ -22,8 +22,22 @@ CREATE TABLE IF NOT EXISTS jobs (
   compensation_amount numeric,
   start_time timestamptz,
   end_time timestamptz,
+  company_name text,
+  time_commitment text,
+  application_deadline timestamptz,
+  requirements text,
+  benefits text,
+  image_url text,
   created_at timestamptz NOT NULL DEFAULT now()
 );
+
+-- Add comments for documentation
+COMMENT ON COLUMN jobs.company_name IS 'Name of the company/organization if different from the poster profile';
+COMMENT ON COLUMN jobs.time_commitment IS 'Expected time commitment (e.g., "5-10 hours / week")';
+COMMENT ON COLUMN jobs.application_deadline IS 'Date when applications close';
+COMMENT ON COLUMN jobs.requirements IS 'Markdown or text description of requirements';
+COMMENT ON COLUMN jobs.benefits IS 'Markdown or text description of what the volunteer gains';
+COMMENT ON COLUMN jobs.image_url IS 'URL for the opportunity cover image';
 
 CREATE INDEX IF NOT EXISTS idx_jobs_poster ON jobs (poster_id);
 CREATE INDEX IF NOT EXISTS idx_jobs_status ON jobs (status);
