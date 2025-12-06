@@ -18,14 +18,7 @@ export default function DashboardPage() {
                   <p className="text-gray-500 text-base font-normal leading-normal mt-1">Connecting social impact with student innovation. Passionate about sustainable development and community building.</p>
                 </div>
               </div>
-              <div className="flex w-full shrink-0 max-w-[480px] gap-3 @[520px]:w-auto @[520px]:flex-col @[768px]:flex-row">
-                <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-5 bg-white text-primary text-sm font-bold leading-normal tracking-[0.015em] flex-1 @[480px]:flex-auto hover:bg-gray-100 transition-colors border border-primary">
-                  <span className="truncate">Connect</span>
-                </button>
-                <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-5 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] flex-1 @[480px]:flex-auto hover:opacity-90 transition-opacity">
-                  <span className="truncate">Share Profile</span>
-                </button>
-              </div>
+
             </div>
           </div>
         </section>
