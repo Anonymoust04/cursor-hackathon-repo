@@ -1,16 +1,59 @@
 import React from 'react';
+import { getJobById } from '@/lib/db/jobs';
+import { fallbackOpportunities } from '@/lib/mock-data';
 
-export default function OpportunityDetailsPage() {
+export default async function OpportunityDetailsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ id: string }>;
+}) {
+  const { id } = await searchParams;
+  
+  let job = null;
+  
+  if (id) {
+    // Try to find in mock data first if it looks like a mock ID
+    if (id.startsWith('mock-')) {
+      job = fallbackOpportunities.find(j => j.id === id) || null;
+    } else {
+      // Otherwise try to fetch from DB
+      job = await getJobById(id).catch(() => null);
+    }
+  }
+
+  // Fallback data if job not found or ID is mock
+  const fallbackJob = {
+    title: "Community Garden Revitalization Project",
+    company: "GreenCorp Initiative",
+    description: "Join us in transforming an underused urban space into a vibrant community garden. This project aims to create a green oasis that provides fresh, local produce, fosters community engagement, and serves as an educational hub for sustainable urban agriculture. We believe in the power of green spaces to build stronger, healthier communities.",
+    location: "City Center Park",
+    type: "Volunteer",
+    start_time: "June 1",
+    end_time: "August 31",
+    cause_tags: ["Environment", "Community"]
+  };
+
+  const displayJob = job ? {
+    title: job.title,
+    company: (job as any).profiles?.full_name || (job as any).company || 'Unknown Company',
+    description: job.description,
+    location: job.location || 'Remote',
+    type: job.type.charAt(0).toUpperCase() + job.type.slice(1),
+    start_time: job.start_time ? new Date(job.start_time).toLocaleDateString() : 'TBD',
+    end_time: job.end_time ? new Date(job.end_time).toLocaleDateString() : 'TBD',
+    cause_tags: job.cause_tags || []
+  } : fallbackJob;
+
   return (
     <div className="flex flex-col min-h-screen bg-background-light light">
       <main className="flex flex-1 justify-center bg-background-light py-8 px-4">
         <div className="layout-content-container flex flex-col w-full max-w-7xl">
           <div className="flex flex-wrap gap-2 pb-6">
-            <a className="text-muted text-sm font-medium leading-normal hover:text-primary" href="#">Opportunities</a>
+            <a className="text-muted text-sm font-medium leading-normal hover:text-primary" href="/opportunity-marketplace">Opportunities</a>
             <span className="text-muted text-sm font-medium leading-normal">/</span>
             <a className="text-muted text-sm font-medium leading-normal hover:text-primary" href="#">Search Results</a>
             <span className="text-muted text-sm font-medium leading-normal">/</span>
-            <span className="text-foreground text-sm font-medium leading-normal">Community Garden Revitalization Project</span>
+            <span className="text-foreground text-sm font-medium leading-normal">{displayJob.title}</span>
           </div>
           <div 
             className="bg-cover bg-center flex flex-col justify-end overflow-hidden rounded-xl min-h-[280px]" 
@@ -22,8 +65,8 @@ export default function OpportunityDetailsPage() {
                 <img alt="GreenCorp Logo" className="h-full w-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHIjmR4iVrIhG0MyG4-9L4jfN3tck_djbgJqT7RBgym2fAxuRzhDI_yt6Z-g7LQiMUp4qhyF4DOeOTJcPe1x606xsobapA2SHTaoD3X_J0LDOCDo1oKmmqfUS1kxtpTW4loUpMvqT9QDkNFW4QjhPXbBRznIZF5-Fq_wQ81T1HNLq5YGBf-XfIgr_zuMc4kxCC7dAw6bsUGrpa-zu9Ba34L6th9njjksMlX78dmi2mGr4N9vMbAoq-jD9PIbg3TxGdpbBSCy69xV0"/>
               </div>
               <div>
-                <h1 className="text-white tracking-tight text-3xl font-bold leading-tight">Community Garden Revitalization Project</h1>
-                <p className="text-white/90 text-lg">GreenCorp Initiative</p>
+                <h1 className="text-white tracking-tight text-3xl font-bold leading-tight">{displayJob.title}</h1>
+                <p className="text-white/90 text-lg">{displayJob.company}</p>
               </div>
             </div>
           </div>
@@ -46,7 +89,7 @@ export default function OpportunityDetailsPage() {
                 </div>
               </div>
               <div className="prose prose-base max-w-none text-foreground pt-4 space-y-4">
-                <p>Join us in transforming an underused urban space into a vibrant community garden. This project aims to create a green oasis that provides fresh, local produce, fosters community engagement, and serves as an educational hub for sustainable urban agriculture. We believe in the power of green spaces to build stronger, healthier communities.</p>
+                <p>{displayJob.description}</p>
                 <h3 className="text-foreground">Project Mission &amp; Goals</h3>
                 <ul className="list-disc pl-5">
                   <li>To increase access to nutritious food for local residents.</li>
@@ -71,7 +114,7 @@ export default function OpportunityDetailsPage() {
                       <span className="material-symbols-outlined text-primary mt-1">calendar_today</span>
                       <div>
                         <p className="font-bold text-sm">Duration</p>
-                        <p className="text-sm">June 1 - August 31</p>
+                        <p className="text-sm">{displayJob.start_time} - {displayJob.end_time}</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-4">
@@ -85,14 +128,14 @@ export default function OpportunityDetailsPage() {
                       <span className="material-symbols-outlined text-primary mt-1">location_on</span>
                       <div>
                         <p className="font-bold text-sm">Location</p>
-                        <p className="text-sm">On-site, City Center Park</p>
+                        <p className="text-sm">{displayJob.location}</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-4">
                       <span className="material-symbols-outlined text-primary mt-1">work</span>
                       <div>
                         <p className="font-bold text-sm">Opportunity Type</p>
-                        <p className="text-sm">Volunteer</p>
+                        <p className="text-sm">{displayJob.type}</p>
                       </div>
                     </div>
                   </div>
