@@ -47,7 +47,7 @@ BEGIN
 In this role, you will be responsible for overseeing the daily operations of our flagship garden in Bangsar. This involves coordinating a team of weekend volunteers, managing the planting calendar suitable for the tropical climate, and organizing monthly harvest sharing events with the local B40 community. You will also act as the primary liaison between the community association and our organization.
 
 This is a hands-on role that requires a love for nature and people. You will be working outdoors, getting your hands dirty, and teaching others the joy of growing their own food (cili padi, kangkung, sawi, etc.). If you believe in food security and community resilience, we want to hear from you.',
-        'Bangsar, Kuala Lumpur',
+        'Pusat Komuniti Bangsar, 366, Lorong Maarof, Bangsar, 59000 Kuala Lumpur',
         'volunteer',
         ARRAY['Environment', 'Community', 'Sustainability'],
         'open',
@@ -76,7 +76,7 @@ This is a hands-on role that requires a love for nature and people. You will be 
 Your primary responsibility will be to conduct one-on-one or small group tutoring sessions. You will help seniors navigate their devices, troubleshoot common issues, and build their confidence in using technology to stay connected with their families and access essential services.
 
 This role is incredibly rewarding as you witness the joy of seniors reconnecting with distant relatives or learning to order food online independently. Patience and empathy are key, as learning speeds vary.',
-        'Petaling Jaya, Selangor',
+        'Pusat Aktiviti Warga Emas (PAWE), Jalan 6/31, Seksyen 6, 46000 Petaling Jaya, Selangor',
         'volunteer',
         ARRAY['Education', 'Elderly Care', 'Technology'],
         'open',
@@ -105,7 +105,7 @@ This role is incredibly rewarding as you witness the joy of seniors reconnecting
 Your duties will include night patrols to identify nesting turtles, relocating eggs to our protected hatchery, and monitoring the hatchery for hatchlings. During the day, you will assist in beach cleanup activities and conduct educational talks for visitors at our conservation center.
 
 Accommodation and meals are provided at the sanctuary. This is a unique opportunity to contribute directly to marine conservation while living by the beautiful East Coast beaches.',
-        'Cherating, Pahang',
+        'Pusat Konservasi dan Penerangan Penyu, Jalan Kuantan - Kemaman, 26080 Cherating, Pahang',
         'volunteer',
         ARRAY['Animals', 'Wildlife', 'Environment'],
         'open',
@@ -163,7 +163,7 @@ This is a remote, paid position suitable for someone with strong writing skills 
 Your role will involve setting up the distribution stations, managing the queue to ensure social distancing and order, serving food, and cleaning up afterwards. You may also be asked to help with basic medical screening registration if you have relevant experience.
 
 This is a fast-paced environment that requires teamwork and compassion. It is an eye-opening experience that brings you face-to-face with the realities of urban poverty in KL.',
-        'Chow Kit, Kuala Lumpur',
+        'Pusat Gelandangan Medan Tuanku, Lorong Medan Tuanku 2, Chow Kit, 50300 Kuala Lumpur',
         'volunteer',
         ARRAY['Hunger', 'Community', 'Social Service'],
         'open',
@@ -192,7 +192,7 @@ This is a fast-paced environment that requires teamwork and compassion. It is an
 We follow a structured curriculum, but we need creative tutors who can make learning fun through games, songs, and storytelling. You will be assigned a small class of 5-8 students aged 7-10 years old.
 
 Consistency is crucial for these children, so we are looking for volunteers who can commit to at least one morning per week for a minimum of 3 months.',
-        'Ampang, Selangor',
+        'Fugee School, No 19, Jalan Damai, 55000 Kuala Lumpur',
         'volunteer',
         ARRAY['Education', 'Refugees', 'Children'],
         'open',
@@ -221,7 +221,7 @@ Consistency is crucial for these children, so we are looking for volunteers who 
 Responsibilities include filming content at our recycling centers, interviewing our eco-warriors, and editing videos for social media. You will also help manage our community engagement online.
 
 This is a great opportunity for mass comm or marketing students looking to build a portfolio in social impact communication.',
-        'Remote / Cyberjaya',
+        'RekaScape, Block 3730, Persiaran APEC, Cyber 8, 63000 Cyberjaya, Selangor',
         'volunteer',
         ARRAY['Environment', 'Marketing', 'Media'],
         'open',
@@ -250,7 +250,7 @@ This is a great opportunity for mass comm or marketing students looking to build
 You will be responsible for maintaining the warehouse inventory system, coordinating with transport volunteers during emergencies, and ensuring supplies are packed and ready for deployment.
 
 This is a paid contract position for 6 months. Experience in logistics or supply chain management is highly preferred.',
-        'Shah Alam, Selangor',
+        'Stadium Malawati, Persiaran Sukan, Seksyen 13, 40100 Shah Alam, Selangor',
         'paid',
         ARRAY['Crisis Response', 'Logistics', 'Community'],
         'open',
@@ -277,7 +277,7 @@ This is a paid contract position for 6 months. Experience in logistics or supply
         'Lead a team of volunteers during our monthly beach cleanup events at Port Dickson. As a Team Leader, you will be responsible for briefing volunteers, ensuring safety protocols are followed, and managing the waste weighing and data recording process.
 
 We provide all necessary equipment. You just need to bring your energy and leadership skills! This is a great way to spend your Sunday morning making a tangible difference.',
-        'Port Dickson, Negeri Sembilan',
+        'Pantai Cahaya Negeri, Batu 4, Jalan Pantai, 71050 Port Dickson, Negeri Sembilan',
         'volunteer',
         ARRAY['Environment', 'Leadership'],
         'open',
@@ -306,7 +306,7 @@ We provide all necessary equipment. You just need to bring your energy and leade
 You will assist the lead instructor during weekend workshops, helping students debug their code (Python/HTML), explaining concepts, and guiding them through their capstone projects.
 
 Your mentorship can open doors to high-income careers for these youths. If you are a tech professional wanting to give back, this is for you.',
-        'George Town, Penang',
+        'Wisma Yeap Chor Ee, 37, Gat Lebuh China, 10300 George Town, Pulau Pinang',
         'volunteer',
         ARRAY['Education', 'Technology', 'STEM'],
         'open',

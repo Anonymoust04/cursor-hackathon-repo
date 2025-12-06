@@ -1,6 +1,7 @@
 import { getJobById } from '@/lib/db/jobs';
 import { fallbackOpportunities } from '@/lib/mock-data';
 import JobTabs from './JobTabs';
+import GoogleMap from '@/components/GoogleMap';
 
 export default async function OpportunityDetailsPage({
   searchParams,
@@ -26,7 +27,7 @@ export default async function OpportunityDetailsPage({
     title: "Community Garden Revitalization Project",
     company: "GreenCorp Initiative",
     description: "Join us in transforming an underused urban space into a vibrant community garden. This project aims to create a green oasis that provides fresh, local produce, fosters community engagement, and serves as an educational hub for sustainable urban agriculture. We believe in the power of green spaces to build stronger, healthier communities.",
-    location: "City Center Park",
+    location: "Taman KLCC, Jalan Ampang, Kuala Lumpur City Centre, 50088 Kuala Lumpur",
     type: "Volunteer",
     start_time: "June 1",
     end_time: "August 31",
@@ -84,7 +85,7 @@ export default async function OpportunityDetailsPage({
                   <div className="pt-4">
                     <h3 className="text-foreground text-lg font-bold mb-3">Location</h3>
                     <div className="aspect-video w-full rounded-lg overflow-hidden border border-border">
-                      <img className="w-full h-full object-cover" alt="A map showing the project location in downtown." data-location="City Center Park" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAftR3o1i10kUzKwnWzC4FUlNfaBKUkw9YsDi5VHgsXDdUFhILywvVkVLzWDRMnOq8e-fohkyQ7NPocGxNQn8zPV9n5UjN9Tr73w8OS80scVhsr79r2OwgPe-0Fy5OzIAOlgKDXgrqJblWSV2QVnhcr6SpG_WEA9TSpxB_8y9_edK7YGAhbHYYd_DDHPbGae9jWJ9i5C8B1ZkfaOQQZxgyPBOM8eORo9Ssx1IDx6YEhIFKdOOr7Rojwx6UcSUmm5VTO7hup9_UrK6U"/>
+                      <GoogleMap location={displayJob.location} />
                     </div>
                   </div>
                 </>
