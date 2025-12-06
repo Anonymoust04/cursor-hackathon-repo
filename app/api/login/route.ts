@@ -15,8 +15,18 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ message: 'Login successful', session: data.session }, { status: 200 });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Login error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    // Handle missing environment variables gracefully
+    if (error.message?.includes('Missing NEXT_PUBLIC_SUPABASE')) {
+      return NextResponse.json(
+        { 
+          error: 'Server configuration error: Missing Supabase credentials',
+          details: error.message 
+        },
+        { status: 500 }
+      );
+    }
+    return NextResponse.json({ error: error.message || 'Internal server error' }, { status: 500 });
   }
 }

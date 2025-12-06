@@ -12,7 +12,7 @@ END$$;
 
 CREATE TABLE IF NOT EXISTS jobs (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  poster_id uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  poster_id uuid NOT NULL REFERENCES poster_profiles(id) ON DELETE CASCADE,
   title text NOT NULL,
   description text NOT NULL,
   location text,
