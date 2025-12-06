@@ -67,8 +67,20 @@ export async function POST(request: Request) {
     }
 
     // Update poster profile's projects_inviting_applications array
-    // TODO: This should be done via a trigger or service function
-    // For now, we'll handle it in the application layer
+    // Add the new project ID to the poster's projects_inviting_applications array
+    const currentProjects = posterProfile.projects_inviting_applications || [];
+    const updatedProjects = [...currentProjects, newProject.id];
+    
+    const { error: updateError } = await supabase
+      .from('poster_profiles')
+      .update({ projects_inviting_applications: updatedProjects })
+      .eq('id', poster_id);
+
+    if (updateError) {
+      console.error('Update poster profile error:', updateError);
+      // Don't fail the request, but log the error
+      // The project was created successfully, just the profile update failed
+    }
 
     return NextResponse.json(newProject, { status: 201 });
   } catch (error: any) {
