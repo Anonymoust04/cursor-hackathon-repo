@@ -1,4 +1,4 @@
-import { getProjects } from '@/lib/db/projects';
+import { getCachedProjects } from '@/lib/db/projects';
 import { fallbackOpportunities } from '@/lib/mock-data';
 import SearchForm from '@/components/SearchForm';
 import OpportunityMarketplaceContent from '@/components/OpportunityMarketplaceContent';
@@ -10,7 +10,7 @@ export default async function OpportunityMarketplace({
 }) {
   const { q, distance } = await searchParams;
   const radius = distance ? parseInt(distance) : 50;
-  const projects = await getProjects(undefined, { search: q }).catch(() => []);
+  const projects = await getCachedProjects({ search: q }).catch(() => []);
 
   let opportunities = projects?.map((project: any) => ({
     id: project.id,

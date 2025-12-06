@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase';
 import { ProjectPayload } from '@/lib/validators/projects';
 import { SupabaseClient } from '@supabase/supabase-js';
+import { unstable_cache } from 'next/cache';
 
 export async function getProjects(client: SupabaseClient = supabase, filters?: any) {
   let query = client
@@ -43,6 +44,20 @@ export async function getProjects(client: SupabaseClient = supabase, filters?: a
 
   return data;
 }
+
+const getProjectsInternal = async (filtersString: string) => {
+  const filters = JSON.parse(filtersString);
+  return getProjects(undefined, filters);
+};
+
+export const getCachedProjects = async (filters?: any) => {
+  const filtersString = JSON.stringify(filters || {});
+  return unstable_cache(
+    async () => getProjectsInternal(filtersString),
+    ['projects-list', filtersString],
+    { tags: ['projects'], revalidate: 3600 }
+  )();
+};
 
 export async function getProjectById(id: string, client: SupabaseClient = supabase) {
   const { data, error } = await client

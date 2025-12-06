@@ -1,11 +1,37 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabase';
 import PostGigModal from './PostGigModal';
+import { clearProjectsCache } from '@/app/actions/auth';
 
 export default function AuthenticatedNavbar() {
   const [isPostGigModalOpen, setIsPostGigModalOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
+
+  const handleSignOut = async () => {
+    await clearProjectsCache();
+    await supabase.auth.signOut();
+    // Clear any client-side caches if necessary
+    router.refresh();
+    router.push('/login');
+  };
 
   return (
     <>
@@ -31,11 +57,25 @@ export default function AuthenticatedNavbar() {
               >
                 <span className="truncate">Post a Gig</span>
               </button>
-              <div 
-                className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" 
-                data-alt="User avatar" 
-                style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuASrFreYhsy6hvjXVNqzCaf6RyqYmLJD6nKRNneQTxQmTvHCxuz2zsRZ9JfXUFBByMW0g4lXtpwnADEtS2Wm9SB7ExNEH9pA2bWSi44L7huQVmlBWNMdmgXBNgOQl86FMMGHIQWrvLovib3alIms0Ix2gD3i31PAA0wAZLWe971S4cpSTHnwexrWFKYZ2E6bJJhz8bGb0ue9OJuHE6Dza1I7ki-d0G5w79oGaDMWYshYpQfEI85f596jl2FKOlm7nWcV07lK6WmlSE")' }}
-              ></div>
+              <div className="relative" ref={dropdownRef}>
+                <button 
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 cursor-pointer hover:opacity-80 transition-opacity" 
+                  data-alt="User avatar" 
+                  style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuASrFreYhsy6hvjXVNqzCaf6RyqYmLJD6nKRNneQTxQmTvHCxuz2zsRZ9JfXUFBByMW0g4lXtpwnADEtS2Wm9SB7ExNEH9pA2bWSi44L7huQVmlBWNMdmgXBNgOQl86FMMGHIQWrvLovib3alIms0Ix2gD3i31PAA0wAZLWe971S4cpSTHnwexrWFKYZ2E6bJJhz8bGb0ue9OJuHE6Dza1I7ki-d0G5w79oGaDMWYshYpQfEI85f596jl2FKOlm7nWcV07lK6WmlSE")' }}
+                ></button>
+                
+                {isDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+                    <button
+                      onClick={handleSignOut}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Sign out
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
             <button className="lg:hidden text-text-light">
               <span className="material-symbols-outlined">menu</span>
