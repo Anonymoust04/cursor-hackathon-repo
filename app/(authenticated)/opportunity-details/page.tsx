@@ -133,9 +133,6 @@ export default async function OpportunityDetailsPage({
                       </div>
                     </div>
                   </div>
-                  <div className="border-t border-border pt-5">
-                    <p className="text-center text-sm font-medium">Applications close in <span className="text-primary font-bold">12 days</span></p>
-                  </div>
                 </div>
                 <div className="flex flex-col gap-3">
                   <button className="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 bg-primary text-primary-content gap-2 text-base font-bold leading-normal tracking-wide hover:bg-primary-dark transition-colors shadow-lg shadow-primary/30">Apply with your Impact Profile</button>
