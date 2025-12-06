@@ -11,7 +11,7 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-export default function EventPage() {
+export default function VolunteerManagement() {
   const studentIds = ["olivia", "liam", "ava", "noah", "emma"];
   const [selectedStudents, setSelectedStudents] = useState<Set<string>>(new Set(["olivia", "liam"]));
 
