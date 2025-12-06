@@ -10,8 +10,8 @@ export async function GET(request: Request) {
     const type = searchParams.get('type');
     const status = searchParams.get('status');
     
-    // Build query
-    let query = supabase.from('jobs').select('*');
+    // Build query - using projects table
+    let query = supabase.from('projects').select('*');
     
     if (type) {
       query = query.eq('type', type);
@@ -24,14 +24,14 @@ export async function GET(request: Request) {
     // TODO: Add pagination when lib/db/jobs is implemented
     // const jobs = await getJobs(supabase, { type, status });
     
-    const { data: jobs, error } = await query;
+    const { data: projects, error } = await query;
     
     if (error) {
-      console.error('Get jobs error:', error);
-      return NextResponse.json({ error: 'Failed to fetch jobs' }, { status: 500 });
+      console.error('Get projects error:', error);
+      return NextResponse.json({ error: 'Failed to fetch projects' }, { status: 500 });
     }
     
-    return NextResponse.json(jobs || []);
+    return NextResponse.json(projects || []);
   } catch (error: any) {
     console.error('GET /api/jobs error:', error);
     return NextResponse.json({ error: error.message || 'Internal server error' }, { status: 500 });
@@ -54,20 +54,23 @@ export async function POST(request: Request) {
     // Use the poster profile id
     const poster_id = posterProfile.id;
 
-    // TODO: Import and use createJob function when lib/db/jobs is implemented
-    // For now, create job directly
-    const { data: newJob, error: createError } = await supabase
-      .from('jobs')
+    // Create project directly
+    const { data: newProject, error: createError } = await supabase
+      .from('projects')
       .insert([{ ...body, poster_id }])
       .select()
       .single();
 
     if (createError) {
-      console.error('Create job error:', createError);
-      return NextResponse.json({ error: 'Failed to create job', details: createError.message }, { status: 500 });
+      console.error('Create project error:', createError);
+      return NextResponse.json({ error: 'Failed to create project', details: createError.message }, { status: 500 });
     }
 
-    return NextResponse.json(newJob, { status: 201 });
+    // Update poster profile's projects_inviting_applications array
+    // TODO: This should be done via a trigger or service function
+    // For now, we'll handle it in the application layer
+
+    return NextResponse.json(newProject, { status: 201 });
   } catch (error: any) {
     console.error('POST /api/jobs error:', error);
     

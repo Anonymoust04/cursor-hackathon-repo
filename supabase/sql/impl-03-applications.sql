@@ -1,4 +1,5 @@
 -- impl-03-applications.sql
+-- Applications now reference projects instead of jobs
 create extension if not exists pgcrypto;
 
 DO $$ BEGIN
@@ -9,7 +10,7 @@ END$$;
 
 CREATE TABLE IF NOT EXISTS applications (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  job_id uuid NOT NULL REFERENCES jobs(id) ON DELETE CASCADE,
+  project_id uuid NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
   applicant_id uuid NOT NULL REFERENCES applicant_profiles(id) ON DELETE CASCADE,
   status application_status NOT NULL DEFAULT 'pending',
   hours_awarded int NOT NULL DEFAULT 0,
@@ -18,17 +19,17 @@ CREATE TABLE IF NOT EXISTS applications (
   verified_at timestamptz
 );
 
-CREATE INDEX IF NOT EXISTS idx_applications_job ON applications (job_id);
+CREATE INDEX IF NOT EXISTS idx_applications_project ON applications (project_id);
 CREATE INDEX IF NOT EXISTS idx_applications_applicant ON applications (applicant_id);
 
--- Trigger to prevent self-apply: posters cannot apply to their own job
+-- Trigger to prevent self-apply: posters cannot apply to their own project
 CREATE OR REPLACE FUNCTION prevent_self_apply() RETURNS trigger LANGUAGE plpgsql AS $$
 DECLARE
   poster uuid;
 BEGIN
-  SELECT poster_id INTO poster FROM jobs WHERE id = NEW.job_id;
+  SELECT poster_id INTO poster FROM projects WHERE id = NEW.project_id;
   IF poster IS NULL THEN
-    RAISE EXCEPTION 'Job not found';
+    RAISE EXCEPTION 'Project not found';
   END IF;
   -- Note: applicant_id is in applicant_profiles, poster_id is in poster_profiles
   -- They are separate tables, so we can't directly compare. 
