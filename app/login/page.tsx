@@ -14,6 +14,45 @@ const roboto = Roboto({
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState('Job Applicant');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Login failed');
+      }
+
+      // Redirect or show success message
+      // For now, we'll just redirect to a dashboard or home page
+      // Since we don't have a dashboard yet, maybe just alert or log
+      console.log('Login successful:', data);
+      // window.location.href = '/dashboard'; 
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className={`${roboto.variable} font-[family-name:var(--font-roboto)] min-h-screen bg-[#f0f6ff] flex items-center justify-center p-4`}>
@@ -44,7 +83,13 @@ export default function LoginPage() {
               <h2 className="text-2xl font-bold text-gray-800">ImpactHub</h2>
             </div>
 
-            <form onSubmit={(e) => e.preventDefault()}>
+            <form onSubmit={handleLogin}>
+              {error && (
+                <div className="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm">
+                  {error}
+                </div>
+              )}
+
               <div className="mb-4">
                 <label className="block mb-2 text-sm font-medium text-gray-600" htmlFor="email">
                   Username or E-mail
@@ -54,6 +99,9 @@ export default function LoginPage() {
                   id="email"
                   placeholder="your.email@example.com"
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
                 />
               </div>
 
@@ -67,6 +115,9 @@ export default function LoginPage() {
                     id="password"
                     placeholder="••••••••"
                     type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
                   />
                   <button
                     className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700"
@@ -103,10 +154,11 @@ export default function LoginPage() {
               </div>
 
               <button
-                className="w-full bg-primary text-white font-bold py-3 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-300 cursor-pointer"
+                className="w-full bg-primary text-white font-bold py-3 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-300 cursor-pointer disabled:opacity-50"
                 type="submit"
+                disabled={loading}
               >
-                Log In
+                {loading ? 'Logging In...' : 'Log In'}
               </button>
             </form>
 
