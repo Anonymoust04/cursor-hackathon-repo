@@ -8,6 +8,13 @@ export interface JobPayload {
   compensation_amount?: number;
   start_time?: string;
   end_time?: string;
+  company_name?: string;
+  company_description?: string;
+  time_commitment?: string;
+  application_deadline?: string;
+  requirements?: string;
+  benefits?: string;
+  image_url?: string;
 }
 
 export function validateJobPayload(payload: any): { valid: boolean; errors: string[] } {
