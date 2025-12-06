@@ -1,4 +1,4 @@
-import { getJobs } from '@/lib/db/jobs';
+import { getProjects } from '@/lib/db/projects';
 import { fallbackOpportunities } from '@/lib/mock-data';
 import SearchForm from '@/components/SearchForm';
 import OpportunityMarketplaceContent from '@/components/OpportunityMarketplaceContent';
@@ -10,18 +10,18 @@ export default async function OpportunityMarketplace({
 }) {
   const { q, distance } = await searchParams;
   const radius = distance ? parseInt(distance) : 50;
-  const jobs = await getJobs(undefined, { search: q }).catch(() => []);
+  const projects = await getProjects(undefined, { search: q }).catch(() => []);
 
-  let opportunities = jobs?.map((job: any) => ({
-    id: job.id,
-    title: job.title,
-    company: job.company_name || job.poster_profiles?.organization_name || 'Unknown Company',
-    description: job.description,
-    tags: [...(job.cause_tags || []), job.type.charAt(0).toUpperCase() + job.type.slice(1)],
+  let opportunities = projects?.map((project: any) => ({
+    id: project.id,
+    title: project.title,
+    company: project.company_name || 'Unknown Company',
+    description: project.description,
+    tags: [...(project.cause_tags || []), project.type.charAt(0).toUpperCase() + project.type.slice(1)],
     icon: 'work', // Default icon
     iconFilled: false,
-    location: job.location,
-    imageUrl: job.image_url || undefined
+    location: project.location,
+    imageUrl: project.image_url || undefined
   })) || [];
 
   if (opportunities.length === 0 && !q) {

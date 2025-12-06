@@ -1,8 +1,8 @@
 import { supabase } from '@/lib/supabase';
-import { JobPayload } from '@/lib/validators/jobs';
+import { ProjectPayload } from '@/lib/validators/projects';
 import { SupabaseClient } from '@supabase/supabase-js';
 
-export async function getJobs(client: SupabaseClient = supabase, filters?: any) {
+export async function getProjects(client: SupabaseClient = supabase, filters?: any) {
   let query = client
     .from('projects')
     .select(`
@@ -33,10 +33,10 @@ export async function getJobs(client: SupabaseClient = supabase, filters?: any) 
 
   if (filters?.search) {
     const searchTerm = filters.search.toLowerCase();
-    return data.filter(job => {
-      const titleMatch = job.title?.toLowerCase().includes(searchTerm);
-      const tagsMatch = job.cause_tags?.some((tag: string) => tag.toLowerCase().includes(searchTerm));
-      const typeMatch = job.type?.toLowerCase().includes(searchTerm);
+    return data.filter(project => {
+      const titleMatch = project.title?.toLowerCase().includes(searchTerm);
+      const tagsMatch = project.cause_tags?.some((tag: string) => tag.toLowerCase().includes(searchTerm));
+      const typeMatch = project.type?.toLowerCase().includes(searchTerm);
       return titleMatch || tagsMatch || typeMatch;
     });
   }
@@ -44,7 +44,7 @@ export async function getJobs(client: SupabaseClient = supabase, filters?: any) 
   return data;
 }
 
-export async function getJobById(id: string, client: SupabaseClient = supabase) {
+export async function getProjectById(id: string, client: SupabaseClient = supabase) {
   const { data, error } = await client
     .from('projects')
     .select(`
@@ -62,10 +62,10 @@ export async function getJobById(id: string, client: SupabaseClient = supabase) 
   return data;
 }
 
-export async function createJob(jobData: JobPayload & { poster_id: string }, client: SupabaseClient = supabase) {
+export async function createProject(projectData: ProjectPayload & { poster_id: string }, client: SupabaseClient = supabase) {
   const { data, error } = await client
     .from('projects')
-    .insert([jobData])
+    .insert([projectData])
     .select()
     .single();
 
@@ -73,10 +73,10 @@ export async function createJob(jobData: JobPayload & { poster_id: string }, cli
   return data;
 }
 
-export async function updateJob(id: string, jobData: Partial<JobPayload>, client: SupabaseClient = supabase) {
+export async function updateProject(id: string, projectData: Partial<ProjectPayload>, client: SupabaseClient = supabase) {
   const { data, error } = await client
     .from('projects')
-    .update(jobData)
+    .update(projectData)
     .eq('id', id)
     .select()
     .single();
@@ -85,7 +85,7 @@ export async function updateJob(id: string, jobData: Partial<JobPayload>, client
   return data;
 }
 
-export async function deleteJob(id: string, client: SupabaseClient = supabase) {
+export async function deleteProject(id: string, client: SupabaseClient = supabase) {
   const { error } = await client
     .from('projects')
     .delete()

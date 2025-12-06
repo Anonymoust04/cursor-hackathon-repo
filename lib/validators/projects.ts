@@ -1,4 +1,4 @@
-export interface JobPayload {
+export interface ProjectPayload {
   title: string;
   description: string;
   location?: string;
@@ -17,7 +17,7 @@ export interface JobPayload {
   image_url?: string;
 }
 
-export function validateJobPayload(payload: any): { valid: boolean; errors: string[] } {
+export function validateProjectPayload(payload: any): { valid: boolean; errors: string[] } {
   const errors: string[] = [];
 
   if (!payload.title || typeof payload.title !== 'string' || payload.title.trim().length === 0) {

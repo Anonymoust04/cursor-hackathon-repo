@@ -1,4 +1,4 @@
-import { getJobById } from '@/lib/db/jobs';
+import { getProjectById } from '@/lib/db/projects';
 import { fallbackOpportunities } from '@/lib/mock-data';
 import JobTabs from './JobTabs';
 import GoogleMap from '@/components/GoogleMap';
@@ -11,19 +11,19 @@ export default async function OpportunityDetailsPage({
 }) {
   const { id } = await searchParams;
   
-  let job = null;
+  let project = null;
   
   if (id) {
     // Try to find in mock data first if it looks like a mock ID
     if (id.startsWith('mock-')) {
-      job = fallbackOpportunities.find(j => j.id === id) || null;
+      project = fallbackOpportunities.find(j => j.id === id) || null;
     } else {
       // Otherwise try to fetch from DB
-      job = await getJobById(id).catch(() => null);
+      project = await getProjectById(id).catch(() => null);
     }
   }
 
-  // Fallback data if job not found or ID is mock
+  // Fallback data if project not found or ID is mock
   const fallbackJob = {
     title: "Community Garden Revitalization Project",
     company: "GreenCorp Initiative",
@@ -41,21 +41,21 @@ export default async function OpportunityDetailsPage({
     company_logo_url: "https://via.placeholder.com/64?text=GreenCorp"
   };
 
-  const displayJob = job ? {
-    title: job.title,
-    company: (job as any).company_name || 'Unknown Company',
-    description: job.description,
-    location: job.location || 'Remote',
-    type: job.type.charAt(0).toUpperCase() + job.type.slice(1),
-    start_time: job.start_time ? new Date(job.start_time).toLocaleDateString() : 'TBD',
-    end_time: job.end_time ? new Date(job.end_time).toLocaleDateString() : 'TBD',
-    cause_tags: job.cause_tags || [],
-    time_commitment: (job as any).time_commitment || 'TBD',
-    requirements: (job as any).requirements,
-    benefits: (job as any).benefits,
-    company_description: (job as any).company_description,
-    image_url: (job as any).image_url || fallbackJob.image_url,
-    company_logo_url: (job as any).company_logo_url || fallbackJob.company_logo_url
+  const displayJob = project ? {
+    title: project.title,
+    company: (project as any).company_name || 'Unknown Company',
+    description: project.description,
+    location: project.location || 'Remote',
+    type: project.type.charAt(0).toUpperCase() + project.type.slice(1),
+    start_time: project.start_time ? new Date(project.start_time).toLocaleDateString() : 'TBD',
+    end_time: project.end_time ? new Date(project.end_time).toLocaleDateString() : 'TBD',
+    cause_tags: project.cause_tags || [],
+    time_commitment: (project as any).time_commitment || 'TBD',
+    requirements: (project as any).requirements,
+    benefits: (project as any).benefits,
+    company_description: (project as any).company_description,
+    image_url: (project as any).image_url || fallbackJob.image_url,
+    company_logo_url: (project as any).company_logo_url || fallbackJob.company_logo_url
   } : fallbackJob;
 
   return (
