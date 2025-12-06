@@ -4,14 +4,29 @@ import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import { getPosterProfile } from '@/lib/profiles';
 import PostGigModal from './PostGigModal';
 import { clearProjectsCache } from '@/app/actions/auth';
 
 export default function AuthenticatedNavbar() {
   const [isPostGigModalOpen, setIsPostGigModalOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [hasPosterProfile, setHasPosterProfile] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    async function checkUserRole() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const profile = await getPosterProfile(user.id);
+        if (profile) {
+          setHasPosterProfile(true);
+        }
+      }
+    }
+    checkUserRole();
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -51,12 +66,14 @@ export default function AuthenticatedNavbar() {
                 <Link className="text-text-light text-sm font-medium leading-normal hover:text-primary" href="/dashboard">Dashboard</Link>
                 <Link className="text-text-light text-sm font-medium leading-normal hover:text-primary" href="/opportunity-marketplace">Marketplace</Link>
               </div>
-              <button 
-                onClick={() => setIsPostGigModalOpen(true)}
-                className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-5 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:opacity-90 transition-opacity"
-              >
-                <span className="truncate">Post a Gig</span>
-              </button>
+              {hasPosterProfile && (
+                <button 
+                  onClick={() => setIsPostGigModalOpen(true)}
+                  className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-5 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:opacity-90 transition-opacity"
+                >
+                  <span className="truncate">Post a Gig</span>
+                </button>
+              )}
               <div className="relative" ref={dropdownRef}>
                 <button 
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
