@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { requirePosterProfile } from '@/lib/auth-helpers';
-// import { getJobs, createJob } from '@/lib/db/jobs';
-// import { validateJobPayload } from '@/lib/validators/jobs';
+import { getProjects, createProject } from '@/lib/db/projects';
+// import { validateProjectPayload } from '@/lib/validators/projects';
 
 export async function GET(request: Request) {
   try {
@@ -21,8 +21,8 @@ export async function GET(request: Request) {
       query = query.eq('status', status);
     }
     
-    // TODO: Add pagination when lib/db/jobs is implemented
-    // const jobs = await getJobs(supabase, { type, status });
+    // TODO: Add pagination when lib/db/projects is implemented
+    // const projects = await getProjects(supabase, { type, status });
     
     const { data: projects, error } = await query;
     
@@ -33,7 +33,7 @@ export async function GET(request: Request) {
     
     return NextResponse.json(projects || []);
   } catch (error: any) {
-    console.error('GET /api/jobs error:', error);
+    console.error('GET /api/projects error:', error);
     return NextResponse.json({ error: error.message || 'Internal server error' }, { status: 500 });
   }
 }
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     
     // Validate payload (if validator exists)
-    // const validation = validateJobPayload(body);
+    // const validation = validateProjectPayload(body);
     // if (!validation.valid) {
     //   return NextResponse.json({ error: 'Validation failed', details: validation.errors }, { status: 400 });
     // }
@@ -72,7 +72,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(newProject, { status: 201 });
   } catch (error: any) {
-    console.error('POST /api/jobs error:', error);
+    console.error('POST /api/projects error:', error);
     
     if (error.message === 'Unauthorized') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

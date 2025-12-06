@@ -62,7 +62,7 @@ export default function PostGigModal({ isOpen, onClose }: PostGigModalProps) {
         poster_id: user.id,
       };
 
-      const response = await fetch('/api/jobs', {
+      const response = await fetch('/api/projects', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

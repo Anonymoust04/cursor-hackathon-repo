@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { validateJobPayload } from '../lib/validators/jobs';
+import { validateProjectPayload } from '../lib/validators/projects';
 
-describe('Job Validation', () => {
+describe('Project Validation', () => {
   it('should validate a correct payload', () => {
     const payload = {
       title: 'Software Engineer',
@@ -12,7 +12,7 @@ describe('Job Validation', () => {
       start_time: new Date().toISOString(),
       end_time: new Date().toISOString(),
     };
-    const result = validateJobPayload(payload);
+    const result = validateProjectPayload(payload);
     expect(result.valid).toBe(true);
     expect(result.errors).toHaveLength(0);
   });
@@ -22,7 +22,7 @@ describe('Job Validation', () => {
       description: 'Develop amazing software',
       type: 'paid',
     };
-    const result = validateJobPayload(payload);
+    const result = validateProjectPayload(payload);
     expect(result.valid).toBe(false);
     expect(result.errors).toContain('Title is required and must be a string');
   });
@@ -33,7 +33,7 @@ describe('Job Validation', () => {
       description: 'Develop amazing software',
       type: 'invalid-type',
     };
-    const result = validateJobPayload(payload);
+    const result = validateProjectPayload(payload);
     expect(result.valid).toBe(false);
     expect(result.errors).toContain('Type must be either "volunteer" or "paid"');
   });
@@ -45,7 +45,7 @@ describe('Job Validation', () => {
       type: 'paid',
       compensation_amount: -100,
     };
-    const result = validateJobPayload(payload);
+    const result = validateProjectPayload(payload);
     expect(result.valid).toBe(false);
     expect(result.errors).toContain('Compensation amount must be a non-negative number');
   });

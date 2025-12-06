@@ -35,8 +35,8 @@ export default function SearchForm() {
           id="distance"
           name="distance"
           type="range" 
-          min="50" 
-          max="500" 
+          min="10" 
+          max="100" 
           step="10"
           value={distance} 
           onChange={(e) => setDistance(e.target.value)}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Roboto } from 'next/font/google';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -15,6 +15,17 @@ const roboto = Roboto({
 
 export default function LoginPage() {
   const router = useRouter();
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        router.replace('/dashboard');
+      }
+    };
+    checkUser();
+  }, [router]);
+
   const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState('Job Applicant');
   const [email, setEmail] = useState('');
