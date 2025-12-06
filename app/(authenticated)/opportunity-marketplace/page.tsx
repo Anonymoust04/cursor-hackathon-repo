@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getJobs } from '@/lib/db/jobs';
 import { fallbackOpportunities } from '@/lib/mock-data';
+import JobsMap from '@/components/JobsMap';
 
 export default async function OpportunityMarketplace({
   searchParams,
@@ -17,7 +18,8 @@ export default async function OpportunityMarketplace({
     description: job.description,
     tags: [...(job.cause_tags || []), job.type.charAt(0).toUpperCase() + job.type.slice(1)],
     icon: 'work', // Default icon
-    iconFilled: false
+    iconFilled: false,
+    location: job.location
   })) || [];
 
   if (opportunities.length === 0 && !q) {
@@ -96,69 +98,7 @@ export default async function OpportunityMarketplace({
           <div className="hidden xl:block">
             <div className="sticky top-24">
               <h2 className="text-lg font-semibold text-text-primary mb-6">Jobs near you</h2>
-              <div className="relative w-full h-[600px] bg-slate-200 rounded-xl border border-slate-200 overflow-hidden">
-                <img alt="Geolocation map showing job locations" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7_jdWhpO7-qAPJXzb8Mmhyj083NIQlGXe2JilNvtmNJzcHIJZqizuBI-04I3zleJVITCJIx9GOD9tuIPkVXD19cvMLu_jB1dnDOqeCeT68Km7FOup3XDl0DumNqWDmS9thqdvKmSv3afelVUXkkVNWNJqUuBR9rr0j9TGEorqjkCXuKkXbrFnEhNa-OUc7iie95rj0r_mi0jaOV7GokO5pT04e8eRzN8hMAw7-gn37Vo7rEPBAlIrfI6o-J-ItuUrPQLBtCsI9Js" />
-                <div className="absolute top-4 left-4 right-4 bg-white/80 backdrop-blur-sm p-4 rounded-lg shadow-lg border border-slate-200">
-                  <p className="text-sm font-semibold text-text-primary">Showing opportunities within a <span className="text-primary">50km</span> radius.</p>
-                </div>
-                <div className="absolute" style={{ top: '25%', left: '40%' }}>
-                  <div className="relative group">
-                    <div className="w-12 h-12 bg-white rounded-full p-1 shadow-lg">
-                      <div className="w-full h-full bg-primary rounded-full flex items-center justify-center">
-                        <div className="w-8 h-8 text-white">
-                          <svg className="w-8 h-8" fill="none" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M21.0132 3.52686L10.3952 20.3529H20.254L18.9868 36.4731L29.6048 19.6471H19.746L21.0132 3.52686Z" fill="currentColor"></path>
-                          </svg>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="absolute bottom-full mb-2 w-48 bg-white p-3 rounded-lg shadow-lg border border-slate-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none left-1/2 -translate-x-1/2">
-                      <h4 className="font-bold text-sm text-text-primary">UX/UI Designer</h4>
-                      <p className="text-xs text-text-secondary">Tech for Good Inc.</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="absolute" style={{ top: '35%', left: '70%' }}>
-                  <div className="relative group">
-                    <div className="w-12 h-12 bg-white rounded-full p-1 shadow-lg">
-                      <div className="w-full h-full bg-slate-800 rounded-full flex items-center justify-center">
-                        <span className="material-symbols-outlined text-white" style={{ fontSize: '28px' }}>public</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="absolute" style={{ top: '50%', left: '55%' }}>
-                  <div className="relative group">
-                    <div className="w-12 h-12 bg-white rounded-full p-1 shadow-lg">
-                      <div className="w-full h-full bg-slate-800 rounded-full flex items-center justify-center">
-                        <span className="material-symbols-outlined text-white" style={{ fontSize: '28px' }}>sync</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="absolute" style={{ top: '70%', left: '45%' }}>
-                  <div className="relative group">
-                    <div className="w-12 h-12 bg-white rounded-full p-1 shadow-lg">
-                      <div className="w-full h-full bg-slate-800 rounded-full flex items-center justify-center">
-                        <span className="material-symbols-outlined text-white" style={{ fontSize: '28px' }}>spa</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center gap-2">
-                  <button className="size-10 rounded-full bg-white shadow-md flex items-center justify-center border border-slate-200 hover:bg-slate-50">
-                    <span className="material-symbols-outlined text-text-secondary">add</span>
-                  </button>
-                  <button className="size-10 rounded-full bg-white shadow-md flex items-center justify-center border border-slate-200 hover:bg-slate-50">
-                    <span className="material-symbols-outlined text-text-secondary">remove</span>
-                  </button>
-                  <div className="grow"></div>
-                  <button className="h-10 px-4 rounded-full bg-white shadow-md flex items-center justify-center gap-2 border border-slate-200 hover:bg-slate-50">
-                    <span className="material-symbols-outlined text-text-secondary">my_location</span>
-                    <span className="text-sm font-medium text-text-secondary">My location</span>
-                  </button>
-                </div>
-              </div>
+              <JobsMap opportunities={opportunities} />
             </div>
           </div>
         </div>
