@@ -1,4 +1,3 @@
-import React from 'react';
 
 export default function DashboardPage() {
   return (
@@ -32,10 +31,6 @@ export default function DashboardPage() {
               <p className="text-text-light tracking-light text-3xl font-bold leading-tight">1,200</p>
               <div className="flex items-center gap-2"><p className="text-gray-500 text-sm font-normal leading-normal">Hours Volunteered</p></div>
             </div>
-            <div className="flex min-w-[140px] flex-1 basis-[fit-content] flex-col gap-2 rounded-xl border border-border-light bg-white p-4 items-start shadow-sm">
-              <p className="text-text-light tracking-light text-3xl font-bold leading-tight">58</p>
-              <div className="flex items-center gap-2"><p className="text-gray-500 text-sm font-normal leading-normal">Connections Made</p></div>
-            </div>
           </div>
         </section>
         <section className="border-t border-border-light pt-8">
@@ -52,12 +47,6 @@ export default function DashboardPage() {
               </button>
               <button className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-md px-4 hover:bg-white/60 transition-colors">
                 <p className="text-gray-500 text-sm font-medium leading-normal">Skills</p>
-              </button>
-            </div>
-            <div className="flex items-center gap-2">
-              <button className="flex items-center gap-2 h-10 px-4 rounded-lg bg-white hover:bg-gray-100 text-gray-500 text-sm font-medium border border-border-light transition-colors">
-                <span>Sort by: Most Recent</span>
-                <span className="material-symbols-outlined text-base">expand_more</span>
               </button>
             </div>
           </div>
