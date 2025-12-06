@@ -1,66 +1,65 @@
 # Impl 01 — Auth & Onboarding
 
-Summary
-- Minimal developer-auth using a hardcoded secret string checked by an API route. Session stored via a signed, HttpOnly cookie. Onboarding creates a `profiles` row and sets a completed flag. This is intentionally non-production and intended for local/intern testing only.
+## Summary
+- This implementation provides a production-ready authentication system using Supabase Auth.
+- It replaces the previous "dev-only" secret mechanism with secure email/password authentication.
 
-Technical implementation
-- API routes (Next.js App Router):
-	- `POST /api/auth/login` (body: `{ secret, displayName, role }`): Verifies `secret === process.env.DEV_AUTH_SECRET`. On success:
-		- generate `userId = gen_random_uuid()` server-side,
-		- upsert `profiles` row using `userId` and supplied `displayName`/`role`,
-		- set a signed cookie `sid` containing `{ userId, iat }`.
-	- `POST /api/auth/logout`: clears cookie.
-	- `GET /api/auth/me`: returns profile for current session.
+## Goals
+- Secure user authentication using Supabase Auth (Email/Password).
+- Automatic profile creation upon signup.
+- Persistent sessions managed by Supabase client.
+- Integration with Next.js App Router.
 
-- Middleware: `middleware.ts` verifies `sid` cookie signature using `process.env.COOKIE_SIGNING_SECRET` and blocks protected API routes (returns 401) when invalid.
+## Implementation Stages (Detailed)
 
-- Helpers: put signing, cookie, and session helpers in `lib/auth.ts` to follow SRP and DRY.
+### Stage A — Supabase Configuration
+- **File**: `lib/supabase.ts`
+- **Purpose**: Initialize the Supabase client for server-side usage.
+- **Env Vars**: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
 
-Architecture and SOLID/DRY notes
-- Keep auth responsibilities separated: `lib/auth` (sign/verify), `api/auth` (routes), `db/profiles` (DB access). This enforces Single Responsibility and keeps code testable.
-- Reuse DB access functions (DRY): `getOrCreateProfile(userId, props)` used by login and onboarding.
+### Stage B — Signup API Route (`POST /api/signup`)
+- **Input**: `{ email, password, fullName, role }`.
+- **Behavior**:
+    1.  Calls `supabase.auth.signUp({ email, password })`.
+    2.  If successful, inserts a row into the `profiles` table with `id` (from auth), `full_name`, and `role`.
+    3.  Returns the user object or error.
+- **Database**: Relies on `profiles` table created via `supabase/sql/impl-01-auth.sql`.
 
-Environment variables
-- `DEV_AUTH_SECRET` — developer login secret (required for login in dev).
-- `COOKIE_SIGNING_SECRET` — HMAC secret used to sign session cookies.
-- `DEV_SESSION_TTL` — session lifetime (seconds), default 604800.
-- `DATABASE_URL` — Postgres connection string for server.
+### Stage C — Login API Route (`POST /api/login`)
+- **Input**: `{ email, password }`.
+- **Behavior**:
+    1.  Calls `supabase.auth.signInWithPassword({ email, password })`.
+    2.  Returns the session object or error.
 
-SQL script
-- Run: `supabase/sql/impl-01-auth.sql` — creates `profiles` table and role enum.
+### Stage D — Frontend Integration
+- **Login Page** (`app/login/page.tsx`):
+    - Form submits to `/api/login`.
+    - Handles success (redirect) and error states.
+    - Enforces light mode design.
+- **Signup Page** (`app/signup/page.tsx`):
+    - Form submits to `/api/signup`.
+    - Includes fields for `fullName`, `email`, `password`, `confirmPassword`, and `role`.
+    - Enforces light mode design.
 
-Example server pseudo-code (concise)
-```ts
-// lib/auth.ts
-import crypto from 'crypto'
-export function sign(payload, secret) { /* HMAC sign + base64 */ }
-export function verify(token, secret) { /* verify and return payload */ }
-```
+### Stage E — Middleware & Route Protection (Future)
+- Implement `middleware.ts` to protect routes (e.g., `/dashboard`) by checking for active Supabase sessions.
 
-```ts
-// app/api/auth/login/route.ts (pseudo)
-export async function POST(req) {
-	const { secret, displayName, role } = await req.json()
-	if (secret !== process.env.DEV_AUTH_SECRET) return new Response(null,{status:401})
-	const userId = crypto.randomUUID()
-	await db.upsertProfile({ id: userId, full_name: displayName, role })
-	const token = sign({ userId, iat: Date.now() }, process.env.COOKIE_SIGNING_SECRET)
-	return new Response(JSON.stringify({ userId }), { status: 200, headers: { 'Set-Cookie': `sid=${token}; HttpOnly; Path=/;` } })
-}
-```
+## Security Notes
+- Passwords are never stored in plain text; Supabase handles hashing and storage.
+- `profiles` table is linked to `auth.users` via `id`.
+- Environment variables must be set in `.env.local`.
 
-Test cases (self-test)
-- Unit tests:
-	- `lib/auth.sign` and `lib/auth.verify` roundtrip with sample payload.
-	- `db.upsertProfile` creates/returns row.
-- Manual E2E:
-	1. `POST /api/auth/login` with `{ secret: DEV_AUTH_SECRET, displayName: 'Alice', role: 'applier' }` -> 200 and `sid` cookie set.
-	2. `GET /api/auth/me` with cookie -> returns profile JSON with `id`, `role`, `onboarding_completed=false`.
-	3. Access protected endpoint `/api/jobs/create` without cookie -> 401; with cookie -> 403 (if not poster) or 200 (if poster).
+## Acceptance Criteria
+- [x] `POST /api/signup` creates a new Auth user and Profile row.
+- [x] `POST /api/login` successfully authenticates a user.
+- [x] Frontend forms correctly interact with API endpoints.
+- [x] UI enforces light mode and specific color palette.
 
-Acceptance checklist
-- `supabase/sql/impl-01-auth.sql` runs and creates `profiles` table.
-- `POST /api/auth/login` sets a valid `sid` cookie and creates/returns `userId`.
-- Middleware blocks unauthorized requests.
+## Related Files
+- `lib/supabase.ts`
+- `app/api/login/route.ts`
+- `app/api/signup/route.ts`
+- `app/login/page.tsx`
+- `app/signup/page.tsx`
+- `supabase/sql/impl-01-auth.sql`
 
-Effort: low
