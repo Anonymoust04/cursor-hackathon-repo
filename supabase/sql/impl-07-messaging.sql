@@ -3,7 +3,7 @@ create extension if not exists pgcrypto;
 
 CREATE TABLE IF NOT EXISTS threads (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  job_id uuid REFERENCES jobs(id) ON DELETE SET NULL,
+  project_id uuid REFERENCES projects(id) ON DELETE SET NULL,
   created_by uuid NOT NULL, -- Can be either applicant_profiles.id or poster_profiles.id
   created_by_type text NOT NULL CHECK (created_by_type IN ('applicant', 'poster')),
   created_at timestamptz NOT NULL DEFAULT now()

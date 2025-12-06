@@ -1,4 +1,4 @@
-export interface JobPayload {
+export interface ProjectPayload {
   title: string;
   description: string;
   location?: string;
@@ -8,9 +8,16 @@ export interface JobPayload {
   compensation_amount?: number;
   start_time?: string;
   end_time?: string;
+  company_name?: string;
+  company_description?: string;
+  time_commitment?: string;
+  application_deadline?: string;
+  requirements?: string;
+  benefits?: string;
+  image_url?: string;
 }
 
-export function validateJobPayload(payload: any): { valid: boolean; errors: string[] } {
+export function validateProjectPayload(payload: any): { valid: boolean; errors: string[] } {
   const errors: string[] = [];
 
   if (!payload.title || typeof payload.title !== 'string' || payload.title.trim().length === 0) {

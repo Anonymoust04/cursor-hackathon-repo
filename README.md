@@ -62,18 +62,19 @@ The system relies on a hierarchical permission model.
     * *Type:* Volunteer, Micro-Gig (Paid).
     * *Cause:* Environment, Education, Health.
     * *Location:* Remote vs. On-site (Geo-fencing).
+    * *Status:* Completed, Ongoing, Accepting Applications.
 
 ### Organisational Dashboard
 
-* **Post a Job:** Form to input Title, Description, Requirements, Date/Time, Location, and Compensation.
-* **Dashboard Overview:** Poster dashboard showing a poster's jobs with server-side pagination and secure actions.
-* **Applicant Tracking:** Paginated table view of users who applied to each job.
+* **Post a Project:** Form to input Title, Description, Requirements, Date/Time, Location, and Compensation.
+* **Dashboard Overview:** Poster dashboard showing a poster's projects with server-side pagination and secure actions.
+* **Applicant Tracking:** Paginated table view of users who applied to each project.
     * *Actions:* Accept, Reject, Verify.
-    * *Pagination:* Server-side pagination via `GET /api/poster/jobs/[id]/applicants?page=&limit=`
+    * *Pagination:* Server-side pagination via `GET /api/poster/projects/[id]/applicants?page=&limit=`
 * **Analytics Summary:** Server-side computed queries displaying:
-    * Applicant counts per job
+    * Applicant counts per project
     * Verified hours sum
-    * Job statistics and metrics
+    * Project statistics and metrics
 * **UI Components:**
     * `PosterDashboard` (container) - Fetches poster jobs via `GET /api/poster/jobs?page=&limit=`
     * `ApplicantTable` - Paginated table with accept, reject, verify actions wired to secure endpoints
@@ -115,9 +116,9 @@ The system relies on a hierarchical permission model.
 * `avatar_url` (text)
 * `impact_hours` (int)
 * `characteristics` (jsonb) - Applicant characteristics (skills, interests, bio, etc.)
-* `projects_completed` (uuid[]) - Array of completed project/job IDs
-* `projects_ongoing` (uuid[]) - Array of ongoing project/job IDs
-* `projects_applied_to` (uuid[]) - Array of job IDs the applicant has applied to
+* `projects_completed` (uuid[]) - Array of completed project IDs (references projects.id)
+* `projects_ongoing` (uuid[]) - Array of ongoing project IDs (references projects.id)
+* `projects_applied_to` (uuid[]) - Array of project IDs the applicant has applied to (references projects.id)
 * `onboarding_completed` (boolean)
 * `created_at` (timestamptz)
 * `updated_at` (timestamptz)
@@ -130,36 +131,53 @@ The system relies on a hierarchical permission model.
 * `avatar_url` (text)
 * `organization_description` (text)
 * `organization_data` (jsonb) - Additional organization info (website, social links, etc.)
-* `projects_completed` (uuid[]) - Array of completed job IDs
-* `projects_ongoing` (uuid[]) - Array of ongoing job IDs
-* `projects_inviting_applications` (uuid[]) - Array of job IDs currently accepting applications
+* `projects_completed` (uuid[]) - Array of completed project IDs (references projects.id)
+* `projects_ongoing` (uuid[]) - Array of ongoing project IDs (references projects.id where is_ongoing = true)
+* `projects_inviting_applications` (uuid[]) - Array of project IDs currently accepting applications (references projects.id where is_accepting_applications = true)
 * `onboarding_completed` (boolean)
 * `created_at` (timestamptz)
 * `updated_at` (timestamptz)
 
-**Table: `jobs`**
-* `id` (PK, uuid)
+**Table: `projects`**
+* `id` (PK, uuid) - Unique project identifier stored in profile arrays
 * `poster_id` (FK -> poster_profiles.id)
 * `title` (text)
 * `description` (text)
-* `status` (enum: 'open', 'closed', 'completed')
+* `status` (enum: 'draft', 'open', 'ongoing', 'closed', 'completed')
 * `type` (enum: 'volunteer', 'paid')
 * `cause_tags` (array)
 * `location` (text)
-* `created_at` (timestamp)
+* `company_name` (text)
+* `company_description` (text)
+* `time_commitment` (text)
+* `application_deadline` (timestamptz)
+* `requirements` (text)
+* `benefits` (text)
+* `image_url` (text)
+* `is_completed` (boolean) - Whether the project is completed
+* `is_ongoing` (boolean) - Whether the project is currently ongoing
+* `is_accepting_applications` (boolean) - Whether the project is currently accepting applications
+* `compensation_amount` (numeric)
+* `start_time` (timestamptz)
+* `end_time` (timestamptz)
+* `qr_token` (text)
+* `qr_expires_at` (timestamptz)
+* `created_at` (timestamptz)
+* `updated_at` (timestamptz)
 
 **Table: `applications`**
 * `id` (PK, uuid)
-* `job_id` (FK -> jobs.id)
+* `project_id` (FK -> projects.id)
 * `applicant_id` (FK -> applicant_profiles.id)
 * `status` (enum: 'pending', 'accepted', 'rejected', 'verified', 'withdrawn')
-* `verified_at` (timestamp)
+* `verified_at` (timestamptz)
 * `hours_awarded` (int)
-* `created_at` (timestamp)
+* `created_at` (timestamptz)
+* `updated_at` (timestamptz)
 
 **Table: `attendances`**
 * `id` (PK, uuid)
-* `job_id` (FK -> jobs.id)
+* `project_id` (FK -> projects.id)
 * `applicant_id` (FK -> applicant_profiles.id)
 * `application_id` (FK -> applications.id)
 * `scanner_id` (FK -> poster_profiles.id, nullable)
@@ -167,7 +185,7 @@ The system relies on a hierarchical permission model.
 
 **Table: `threads`**
 * `id` (PK, uuid)
-* `job_id` (FK -> jobs.id, nullable)
+* `project_id` (FK -> projects.id, nullable)
 * `created_by` (uuid) - Can be applicant_profiles.id or poster_profiles.id
 * `created_by_type` (text) - Either 'applicant' or 'poster'
 * `created_at` (timestamptz)
@@ -212,32 +230,37 @@ The system relies on a hierarchical permission model.
   * Requires authentication
   * For poster profiles, `organizationName` is required
 
-### Jobs
+### Projects
 
-* `GET /api/jobs` - Public job feed with pagination and optional filters (`type`, `cause`, `location`)
-* `GET /api/jobs/[id]` - Public job detail
-* `POST /api/jobs` - Create job (Poster only, validates `session.userId` exists in `poster_profiles`)
-* `PATCH /api/jobs/[id]` - Update job (Owner only)
-* `DELETE /api/jobs/[id]` - Delete job (Owner only)
+* `GET /api/projects` - Public project feed with pagination and optional filters (`type`, `cause`, `location`, `status`, `is_accepting_applications`)
+* `GET /api/projects/[id]` - Public project detail
+* `POST /api/projects` - Create project (Poster only, validates `session.userId` exists in `poster_profiles`)
+  * Returns created project with unique `id` that should be stored in profile arrays
+* `PATCH /api/projects/[id]` - Update project (Owner only)
+* `DELETE /api/projects/[id]` - Delete project (Owner only)
 
 ### Applications
 
-* `POST /api/jobs/[id]/apply` - Create application (reads `session.userId` as `applicant_id`, prevents self-apply)
+* `POST /api/projects/[id]/apply` - Create application (reads `session.userId` as `applicant_id`, prevents self-apply)
+  * Adds project_id to applicant's `projects_applied_to` array
 * `DELETE /api/applications/[id]` - Withdraw application (soft-delete via `status='withdrawn'`)
 * `GET /api/my/applications` - List current user's applications
 * `PATCH /api/applications/[id]/accept` - Accept application (Poster only)
+  * Adds project_id to applicant's `projects_ongoing` array if not already present
 * `PATCH /api/applications/[id]/reject` - Reject application (Poster only)
 * `PATCH /api/applications/[id]/verify` - Verify completion (Poster only, accepts `{ hours_awarded }`)
+  * Moves project_id from `projects_ongoing` to `projects_completed` in applicant profile
+  * Updates project's `is_completed` flag
 
 ### Poster Dashboard
 
-* `GET /api/poster/jobs` - Returns jobs with minimal applicant counts (paginated: `?page=&limit=`)
-* `GET /api/poster/jobs/[id]/applicants` - Paginated applicants for a job
+* `GET /api/poster/projects` - Returns projects with minimal applicant counts (paginated: `?page=&limit=`)
+* `GET /api/poster/projects/[id]/applicants` - Paginated applicants for a project
 
 ### QR Verification
 
-* `POST /api/jobs/[id]/qr/generate` - Generate QR code (Poster only)
-  * Generates signed token (HMAC or JWT) containing `{ jobId, exp }`
+* `POST /api/projects/[id]/qr/generate` - Generate QR code (Poster only)
+  * Generates signed token (HMAC or JWT) containing `{ projectId, exp }`
   * Returns QR payload (URL pointing to `/qr/scan?token=...`)
 * `POST /api/qr/scan` - Scan QR code and record attendance
   * Accepts `{ token }`
@@ -260,14 +283,15 @@ The system relies on a hierarchical permission model.
 
 ### Row Level Security (RLS)
 
-* **Jobs Table:**
+* **Projects Table:**
     * `SELECT`: Public
     * `INSERT/UPDATE/DELETE`: Only users where `auth.uid() == poster_id` (poster_id references poster_profiles)
+    * Projects are unique and identified by their `id` which is stored in profile arrays
 * **Applications Table:**
-    * `INSERT`: Authenticated users (Appliers & Posters)
-    * `UPDATE`: Only `poster_id` of the parent Job (to accept/verify) OR `applicant_id` (to withdraw)
+    * `INSERT`: Authenticated users with applicant profiles
+    * `UPDATE`: Only `poster_id` of the parent Project (to accept/verify) OR `applicant_id` (to withdraw)
 * **Self-Application Constraint:**
-    * Database trigger `prevent_self_apply()` ensures `applicant_id != poster_id` (User cannot apply to their own job)
+    * Database trigger `prevent_self_apply()` prevents users from applying to their own projects
 
 ### Middleware
 
@@ -323,12 +347,18 @@ QR_SIGNING_SECRET=your-qr-signing-secret
 4. Run database migrations:
 Execute SQL scripts in order:
 * `supabase/sql/impl-01-auth.sql` - Creates `applicant_profiles` and `poster_profiles` tables
-* `supabase/sql/impl-02-jobs.sql` - Creates `jobs` table, enums, indexes (GIN on `cause_tags`)
+* `supabase/sql/impl-02-jobs.sql` - Creates `projects` table (renamed from jobs), enums, indexes (GIN on `cause_tags`)
+  * Projects store all unique project data collated from both profile types
+  * Each project has a unique `id` that is stored in profile arrays
+  * Includes status tracking columns: `is_completed`, `is_ongoing`, `is_accepting_applications`
 * `supabase/sql/impl-03-applications.sql` - Creates `applications` table and `prevent_self_apply()` trigger
+  * Applications reference `projects.id` (formerly `job_id`)
 * `supabase/sql/impl-04-verification.sql` - Alters `applications` to add `verified_at` and `hours_awarded`
-* `supabase/sql/impl-05-analytics.sql` - Optional view: `poster_job_stats(poster_id)` with `job_id, applicant_count, verified_hours_sum`
-* `supabase/sql/impl-06-qr.sql` - Creates `attendances` table
+* `supabase/sql/impl-05-analytics.sql` - Optional view: `poster_project_stats` with `project_id, applicant_count, verified_hours_sum`
+* `supabase/sql/impl-06-qr.sql` - Creates `attendances` table and adds QR fields to projects
+  * Attendances reference `projects.id` (formerly `job_id`)
 * `supabase/sql/impl-07-messaging.sql` - Creates `threads`, `messages`, and `notifications` tables
+  * Threads reference `projects.id` (formerly `job_id`)
 
 5. Start the development server:
 ```bash
@@ -381,17 +411,20 @@ bun dev
 * `DEV_SESSION_TTL` - Session lifetime (seconds), default 604800
 * `DATABASE_URL` - Postgres connection string
 
-### Impl 02: Jobs Schema & Posting
+### Impl 02: Projects Schema & Posting
 
-* Creates `jobs` schema with enums, indexes (GIN on `cause_tags`)
+* Creates `projects` table with enums, indexes (GIN on `cause_tags`)
+* Projects are unique entities with unique IDs stored in profile arrays
+* Includes status tracking: `is_completed`, `is_ongoing`, `is_accepting_applications`
 * Poster-only create/edit/delete API
-* Public feed and job detail pages
+* Public feed and project detail pages
 * Controller/service/repository separation
-* Validation reuse with `validateJobPayload`
+* Validation reuse with `validateProjectPayload`
 
 **SQL Notes:**
 * GIN index on `cause_tags` for tag filtering
-* Index on `poster_id` and `status` for fast poster queries
+* Indexes on `poster_id`, `status`, `is_completed`, `is_ongoing`, `is_accepting_applications` for fast queries
+* Projects table is the source of truth for all project data
 
 ### Impl 03: Applications & Self-Apply Guard
 
