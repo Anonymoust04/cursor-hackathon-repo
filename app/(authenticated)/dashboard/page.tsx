@@ -44,12 +44,12 @@ export default function DashboardPage() {
         const profiles = await getUserProfiles(session.user.id);
 
         // Calculate total projects completed (from both profiles)
-        const applicantCompleted = profiles.applicant?.projects_completed?.length || 0;
-        const posterCompleted = profiles.poster?.projects_completed?.length || 0;
-        const totalProjectsCompleted = applicantCompleted + posterCompleted;
+        // TODO: Replace hardcoded values with actual database values when data is available
+        const totalProjectsCompleted = 6;
 
         // Get total hours (from applicant profile only)
-        const totalHours = profiles.applicant?.impact_hours || 0;
+        // TODO: Replace hardcoded value with actual database value when data is available
+        const totalHours = 40;
 
         // Get all unique project IDs from both profiles
         const allProjectIds = getAllProjectIdsFromProfiles(
@@ -98,13 +98,13 @@ export default function DashboardPage() {
   const displayBio = 
     data.applicantProfile?.characteristics?.bio || 
     data.posterProfile?.organization_description || 
-    'No bio available.';
+    'Passionate about community service and making a positive impact. Currently associated with University of Malaya. Email: abel.chin@um.edu.my | Location: Kuala Lumpur, Malaysia';
 
-  // Get avatar URL
+  // Get avatar URL with fallback to placeholder (Chinese man)
   const avatarUrl = 
     data.applicantProfile?.avatar_url || 
     data.posterProfile?.avatar_url || 
-    '';
+    'https://i.pravatar.cc/300?img=68';
 
   // Filter projects based on active filter
   const displayedProjects = data.projects.filter(project => {
