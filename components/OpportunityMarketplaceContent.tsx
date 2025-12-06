@@ -106,7 +106,7 @@ export default function OpportunityMarketplaceContent({ opportunities, radius }:
       for (const job of opportunities) {
         if (!isMounted) return;
 
-        if (!job.location || job.location.toLowerCase() === 'remote') {
+        if (!job.location || job.location.trim() === '' || job.location.toLowerCase() === 'remote') {
            // Optional: Decide if remote jobs should be included. 
            // For now, let's include them as they are valid opportunities.
            nearby.push(job);
@@ -145,8 +145,13 @@ export default function OpportunityMarketplaceContent({ opportunities, radius }:
               nearby.push(job);
             }
           }
-        } catch (error) {
-          console.error(`Error geocoding ${job.location}:`, error);
+        } catch (error: any) {
+          // Ignore ZERO_RESULTS errors as they just mean the location couldn't be found
+          if (error?.code === 'ZERO_RESULTS' || error?.message?.includes('ZERO_RESULTS')) {
+            console.warn(`Could not geocode location: ${job.location}`);
+          } else {
+            console.error(`Error geocoding ${job.location}:`, error);
+          }
         }
       }
       

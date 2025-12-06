@@ -4,12 +4,13 @@ import { SupabaseClient } from '@supabase/supabase-js';
 
 export async function getJobs(client: SupabaseClient = supabase, filters?: any) {
   let query = client
-    .from('jobs')
+    .from('projects')
     .select(`
       *,
-      profiles (
+      poster_profiles (
         full_name,
-        avatar_url
+        avatar_url,
+        organization_name
       )
     `);
 
@@ -45,12 +46,13 @@ export async function getJobs(client: SupabaseClient = supabase, filters?: any) 
 
 export async function getJobById(id: string, client: SupabaseClient = supabase) {
   const { data, error } = await client
-    .from('jobs')
+    .from('projects')
     .select(`
       *,
-      profiles (
+      poster_profiles (
         full_name,
-        avatar_url
+        avatar_url,
+        organization_name
       )
     `)
     .eq('id', id)
@@ -62,7 +64,7 @@ export async function getJobById(id: string, client: SupabaseClient = supabase) 
 
 export async function createJob(jobData: JobPayload & { poster_id: string }, client: SupabaseClient = supabase) {
   const { data, error } = await client
-    .from('jobs')
+    .from('projects')
     .insert([jobData])
     .select()
     .single();
@@ -73,7 +75,7 @@ export async function createJob(jobData: JobPayload & { poster_id: string }, cli
 
 export async function updateJob(id: string, jobData: Partial<JobPayload>, client: SupabaseClient = supabase) {
   const { data, error } = await client
-    .from('jobs')
+    .from('projects')
     .update(jobData)
     .eq('id', id)
     .select()
@@ -85,7 +87,7 @@ export async function updateJob(id: string, jobData: Partial<JobPayload>, client
 
 export async function deleteJob(id: string, client: SupabaseClient = supabase) {
   const { error } = await client
-    .from('jobs')
+    .from('projects')
     .delete()
     .eq('id', id);
 

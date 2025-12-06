@@ -15,7 +15,7 @@ export default async function OpportunityMarketplace({
   let opportunities = jobs?.map((job: any) => ({
     id: job.id,
     title: job.title,
-    company: job.company_name || 'Unknown Company',
+    company: job.company_name || job.poster_profiles?.organization_name || 'Unknown Company',
     description: job.description,
     tags: [...(job.cause_tags || []), job.type.charAt(0).toUpperCase() + job.type.slice(1)],
     icon: 'work', // Default icon
