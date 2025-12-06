@@ -24,6 +24,7 @@ interface Opportunity {
   tags: string[];
   icon: string;
   iconFilled: boolean;
+  imageUrl?: string;
   [key: string]: any;
 }
 
@@ -186,13 +187,20 @@ export default function OpportunityMarketplaceContent({ opportunities, radius }:
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {displayOpportunities.map((opportunity) => (
               <div key={opportunity.id} className="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-primary transition-all duration-300 flex flex-col">
-                <div className="h-40 bg-slate-200 rounded-t-xl flex items-center justify-center">
-                  <span 
-                    className="material-symbols-outlined text-5xl text-slate-400" 
-                    style={opportunity.iconFilled ? { fontVariationSettings: "'FILL' 1" } : {}}
-                  >
-                    {opportunity.icon}
-                  </span>
+                <div className="h-40 bg-slate-200 rounded-t-xl flex items-center justify-center overflow-hidden relative">
+                  {opportunity.imageUrl ? (
+                    <div 
+                      className="w-full h-full bg-cover bg-center"
+                      style={{ backgroundImage: `url(${opportunity.imageUrl})` }}
+                    />
+                  ) : (
+                    <span 
+                      className="material-symbols-outlined text-5xl text-slate-400" 
+                      style={opportunity.iconFilled ? { fontVariationSettings: "'FILL' 1" } : {}}
+                    >
+                      {opportunity.icon}
+                    </span>
+                  )}
                 </div>
                 <div className="p-4 flex flex-col grow">
                   <h3 className="font-bold text-text-primary text-lg leading-tight">{opportunity.title}</h3>
