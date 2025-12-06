@@ -1,6 +1,7 @@
-import React from 'react';
 import { getJobById } from '@/lib/db/jobs';
 import { fallbackOpportunities } from '@/lib/mock-data';
+import JobTabs from './JobTabs';
+import GoogleMap from '@/components/GoogleMap';
 
 export default async function OpportunityDetailsPage({
   searchParams,
@@ -26,22 +27,30 @@ export default async function OpportunityDetailsPage({
     title: "Community Garden Revitalization Project",
     company: "GreenCorp Initiative",
     description: "Join us in transforming an underused urban space into a vibrant community garden. This project aims to create a green oasis that provides fresh, local produce, fosters community engagement, and serves as an educational hub for sustainable urban agriculture. We believe in the power of green spaces to build stronger, healthier communities.",
-    location: "City Center Park",
+    location: "Taman KLCC, Jalan Ampang, Kuala Lumpur City Centre, 50088 Kuala Lumpur",
     type: "Volunteer",
     start_time: "June 1",
     end_time: "August 31",
-    cause_tags: ["Environment", "Community"]
+    cause_tags: ["Environment", "Community"],
+    time_commitment: "5-10 hours / week",
+    requirements: "No prior gardening experience required. Willingness to work outdoors and get hands dirty. Team player attitude.",
+    benefits: "Learn about urban agriculture. Meet like-minded community members. Take home fresh produce.",
+    company_description: "GreenCorp Initiative is a non-profit organization dedicated to creating sustainable urban green spaces."
   };
 
   const displayJob = job ? {
     title: job.title,
-    company: (job as any).profiles?.full_name || (job as any).company || 'Unknown Company',
+    company: (job as any).company_name || 'Unknown Company',
     description: job.description,
     location: job.location || 'Remote',
     type: job.type.charAt(0).toUpperCase() + job.type.slice(1),
     start_time: job.start_time ? new Date(job.start_time).toLocaleDateString() : 'TBD',
     end_time: job.end_time ? new Date(job.end_time).toLocaleDateString() : 'TBD',
-    cause_tags: job.cause_tags || []
+    cause_tags: job.cause_tags || [],
+    time_commitment: (job as any).time_commitment || 'TBD',
+    requirements: (job as any).requirements,
+    benefits: (job as any).benefits,
+    company_description: (job as any).company_description
   } : fallbackJob;
 
   return (
@@ -50,8 +59,6 @@ export default async function OpportunityDetailsPage({
         <div className="layout-content-container flex flex-col w-full max-w-7xl">
           <div className="flex flex-wrap gap-2 pb-6">
             <a className="text-muted text-sm font-medium leading-normal hover:text-primary" href="/opportunity-marketplace">Opportunities</a>
-            <span className="text-muted text-sm font-medium leading-normal">/</span>
-            <a className="text-muted text-sm font-medium leading-normal hover:text-primary" href="#">Search Results</a>
             <span className="text-muted text-sm font-medium leading-normal">/</span>
             <span className="text-foreground text-sm font-medium leading-normal">{displayJob.title}</span>
           </div>
@@ -71,41 +78,23 @@ export default async function OpportunityDetailsPage({
             </div>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
-            <div className="lg:col-span-2">
-              <div className="pb-3">
-                <div className="flex border-b border-border gap-8">
-                  <a className="flex flex-col items-center justify-center border-b-[3px] border-b-primary text-primary pb-[13px] pt-4" href="#">
-                    <p className="text-sm font-bold leading-normal tracking-[0.015em]">Description</p>
-                  </a>
-                  <a className="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-muted hover:text-foreground pb-[13px] pt-4 transition-colors" href="#">
-                    <p className="text-sm font-bold leading-normal tracking-[0.015em]">Requirements</p>
-                  </a>
-                  <a className="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-muted hover:text-foreground pb-[13px] pt-4 transition-colors" href="#">
-                    <p className="text-sm font-bold leading-normal tracking-[0.015em]">What You&apos;ll Gain</p>
-                  </a>
-                  <a className="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-muted hover:text-foreground pb-[13px] pt-4 transition-colors" href="#">
-                    <p className="text-sm font-bold leading-normal tracking-[0.015em]">About GreenCorp</p>
-                  </a>
-                </div>
-              </div>
-              <div className="prose prose-base max-w-none text-foreground pt-4 space-y-4">
-                <p>{displayJob.description}</p>
-                <h3 className="text-foreground">Project Mission &amp; Goals</h3>
-                <ul className="list-disc pl-5">
-                  <li>To increase access to nutritious food for local residents.</li>
-                  <li>To create a beautiful, safe, and inclusive gathering place for the community.</li>
-                  <li>To provide hands-on learning opportunities about gardening, composting, and environmental stewardship.</li>
-                  <li>To foster intergenerational connections and promote a sense of shared community ownership.</li>
-                </ul>
-                <p>As a volunteer, you will be at the heart of this transformation, working alongside community members and our team to bring this vision to life. Your contribution will have a lasting impact, creating a legacy of sustainability and community pride.</p>
-                <div className="pt-4">
-                  <h3 className="text-foreground text-lg font-bold mb-3">Location</h3>
-                  <div className="aspect-video w-full rounded-lg overflow-hidden border border-border">
-                    <img className="w-full h-full object-cover" alt="A map showing the project location in downtown." data-location="City Center Park" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAftR3o1i10kUzKwnWzC4FUlNfaBKUkw9YsDi5VHgsXDdUFhILywvVkVLzWDRMnOq8e-fohkyQ7NPocGxNQn8zPV9n5UjN9Tr73w8OS80scVhsr79r2OwgPe-0Fy5OzIAOlgKDXgrqJblWSV2QVnhcr6SpG_WEA9TSpxB_8y9_edK7YGAhbHYYd_DDHPbGae9jWJ9i5C8B1ZkfaOQQZxgyPBOM8eORo9Ssx1IDx6YEhIFKdOOr7Rojwx6UcSUmm5VTO7hup9_UrK6U"/>
+            <JobTabs 
+              description={
+                <>
+                  <p>{displayJob.description}</p>
+                  <div className="pt-4">
+                    <h3 className="text-foreground text-lg font-bold mb-3">Location</h3>
+                    <div className="aspect-video w-full rounded-lg overflow-hidden border border-border">
+                      <GoogleMap location={displayJob.location} />
+                    </div>
                   </div>
-                </div>
-              </div>
-            </div>
+                </>
+              }
+              requirements={displayJob.requirements}
+              benefits={displayJob.benefits}
+              companyName={displayJob.company}
+              companyDescription={displayJob.company_description}
+            />
             <div className="lg:col-span-1">
               <div className="sticky top-28 space-y-4">
                 <div className="bg-background border border-border rounded-xl p-6 space-y-5">
@@ -121,7 +110,7 @@ export default async function OpportunityDetailsPage({
                       <span className="material-symbols-outlined text-primary mt-1">schedule</span>
                       <div>
                         <p className="font-bold text-sm">Time Commitment</p>
-                        <p className="text-sm">5-10 hours / week</p>
+                        <p className="text-sm">{displayJob.time_commitment}</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-4">
@@ -138,9 +127,6 @@ export default async function OpportunityDetailsPage({
                         <p className="text-sm">{displayJob.type}</p>
                       </div>
                     </div>
-                  </div>
-                  <div className="border-t border-border pt-5">
-                    <p className="text-center text-sm font-medium">Applications close in <span className="text-primary font-bold">12 days</span></p>
                   </div>
                 </div>
                 <div className="flex flex-col gap-3">

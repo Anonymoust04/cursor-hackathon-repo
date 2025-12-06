@@ -20,11 +20,26 @@ export async function getJobs(client: SupabaseClient = supabase, filters?: any) 
   if (filters?.status) {
     query = query.eq('status', filters.status);
   }
+
+  if (filters?.search) {
+    // query = query.or(`title.ilike.%${filters.search}%,description.ilike.%${filters.search}%`);
+  }
   
   // Add more filters as needed
 
   const { data, error } = await query;
   if (error) throw error;
+
+  if (filters?.search) {
+    const searchTerm = filters.search.toLowerCase();
+    return data.filter(job => {
+      const titleMatch = job.title?.toLowerCase().includes(searchTerm);
+      const tagsMatch = job.cause_tags?.some((tag: string) => tag.toLowerCase().includes(searchTerm));
+      const typeMatch = job.type?.toLowerCase().includes(searchTerm);
+      return titleMatch || tagsMatch || typeMatch;
+    });
+  }
+
   return data;
 }
 

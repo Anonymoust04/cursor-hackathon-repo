@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS jobs (
   start_time timestamptz,
   end_time timestamptz,
   company_name text,
+  company_description text,
   time_commitment text,
   application_deadline timestamptz,
   requirements text,
@@ -33,6 +34,7 @@ CREATE TABLE IF NOT EXISTS jobs (
 
 -- Add comments for documentation
 COMMENT ON COLUMN jobs.company_name IS 'Name of the company/organization if different from the poster profile';
+COMMENT ON COLUMN jobs.company_description IS 'Description of the company/organization';
 COMMENT ON COLUMN jobs.time_commitment IS 'Expected time commitment (e.g., "5-10 hours / week")';
 COMMENT ON COLUMN jobs.application_deadline IS 'Date when applications close';
 COMMENT ON COLUMN jobs.requirements IS 'Markdown or text description of requirements';
