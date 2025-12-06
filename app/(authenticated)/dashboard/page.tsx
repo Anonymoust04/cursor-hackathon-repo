@@ -35,20 +35,7 @@ export default function DashboardPage() {
         </section>
         <section className="border-t border-border-light pt-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 px-4">
-            <div className="flex gap-2 p-1 bg-gray-100 rounded-lg overflow-x-auto">
-              <button className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-md bg-white px-4 shadow-sm">
-                <p className="text-text-light text-sm font-medium leading-normal">All</p>
-              </button>
-              <button className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-md px-4 hover:bg-white/60 transition-colors">
-                <p className="text-gray-500 text-sm font-medium leading-normal">Projects</p>
-              </button>
-              <button className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-md px-4 hover:bg-white/60 transition-colors">
-                <p className="text-gray-500 text-sm font-medium leading-normal">Badges</p>
-              </button>
-              <button className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-md px-4 hover:bg-white/60 transition-colors">
-                <p className="text-gray-500 text-sm font-medium leading-normal">Skills</p>
-              </button>
-            </div>
+            <h2 className="text-text-light text-xl font-bold leading-tight">Projects Completed</h2>
           </div>
         </section>
         <section className="p-4">
@@ -60,11 +47,6 @@ export default function DashboardPage() {
             >
               <p className="text-white text-base font-bold leading-tight line-clamp-3">Community Garden Initiative</p>
             </div>
-            <div className="bg-white rounded-lg p-4 mb-4 break-inside-avoid-column flex flex-col items-center justify-center gap-3 text-center border border-border-light" data-alt="Community Leader badge">
-              <span className="material-symbols-outlined text-primary text-6xl">workspace_premium</span>
-              <h3 className="font-bold text-text-light">Community Leader</h3>
-              <p className="text-xs text-gray-500">Awarded for organizing 3+ events.</p>
-            </div>
             <div 
               className="bg-cover bg-center flex flex-col gap-3 rounded-lg justify-end p-4 aspect-[3/4] mb-4 break-inside-avoid-column relative overflow-hidden group" 
               data-alt="Students at a hackathon event" 
@@ -72,13 +54,8 @@ export default function DashboardPage() {
             >
               <p className="text-white text-base font-bold leading-tight line-clamp-3">Tech for Good Hackathon</p>
             </div>
-            <div className="bg-white rounded-lg p-4 mb-4 break-inside-avoid-column flex flex-col items-center justify-center gap-3 text-center border border-border-light" data-alt="Skill: Public Speaking">
-              <span className="material-symbols-outlined text-primary text-6xl">campaign</span>
-              <h3 className="font-bold text-text-light">Public Speaking</h3>
-              <p className="text-xs text-gray-500">Validated by 5 connections.</p>
-            </div>
             <div 
-              className="bg-cover bg-center flglex flex-col gap-3 rounded-lg justify-end p-4 aspect-square mb-4 break-inside-avoid-column relative overflow-hidden group" 
+              className="bg-cover bg-center flex flex-col gap-3 rounded-lg justify-end p-4 aspect-square mb-4 break-inside-avoid-column relative overflow-hidden group" 
               data-alt="Person mentoring a student" 
               style={{ backgroundImage: 'linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 60%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuB-VXiMe22Wl3Eo9nhLyeDGDWYgl73opCHilMcemVhlz3WmZ570Tx8KoJ1S_ETm2XwPsO-qTzl1vvIw_TjkuOnr3VvhrIg-VNCgDQ8B5pTMnMwEhizWNXInlcGhvrZZI9oHyNM4vazt3tXGGuZmbudIYnq3QgoTBAoqCE2lkiGbWGPfkbqUOoIW6Fh-_jlMBmh83eFTSZM10ikIgXqY8_CTcadxnQWVHRkrcdCDpYHWMhI40wW8v6zCj_aMMbsfdquSV5qWQ0ijVsI")' }}
             >
@@ -91,22 +68,12 @@ export default function DashboardPage() {
             >
               <p className="text-white text-base font-bold leading-tight line-clamp-3">Sustainable Fashion Expo</p>
             </div>
-            <div className="bg-white rounded-lg p-4 mb-4 break-inside-avoid-column flex flex-col items-center justify-center gap-3 text-center border border-border-light" data-alt="Badge for 500 volunteer hours">
-              <span className="material-symbols-outlined text-primary text-6xl">military_tech</span>
-              <h3 className="font-bold text-text-light">500 Hour Club</h3>
-              <p className="text-xs text-gray-500">For exceptional dedication.</p>
-            </div>
             <div 
               className="bg-cover bg-center flex flex-col gap-3 rounded-lg justify-end p-4 aspect-[3/4] mb-4 break-inside-avoid-column relative overflow-hidden group" 
               data-alt="Clean water tap in a village" 
               style={{ backgroundImage: 'linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 60%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuDpbS09oQLIwDbGtmGDOjt-c75e6KsbeeocyoL5qXrqkE82Kt7Qu86QQL5CP677wFY4St-RUg4vMkasJurq9H8uQJSuq-joB0Usia2dGvw8KCZ6m2BErDSLSFAABGFnLq_qh5_GAGfwy5f8qe9GjPGIzwOJyLptwq5NBkIqAHnDjpF7lrnQb3B4q59OFr2AE5VxREedGv3SpdjAICiJIxJm5FMiBT0lm0Z2ixMxXKuxjArqzO9B7bo2-U-Y2Oz2BfJ9f85FTKrXJ-s")' }}
             >
               <p className="text-white text-base font-bold leading-tight line-clamp-3">Clean Water Project - Ghana</p>
-            </div>
-            <div className="bg-white rounded-lg p-4 mb-4 break-inside-avoid-column flex flex-col items-center justify-center gap-3 text-center border border-border-light" data-alt="Skill: Project Management">
-              <span className="material-symbols-outlined text-primary text-6xl">task_alt</span>
-              <h3 className="font-bold text-text-light">Project Management</h3>
-              <p className="text-xs text-gray-500">Validated by 3 connections.</p>
             </div>
             <div 
               className="bg-cover bg-center flex flex-col gap-3 rounded-lg justify-end p-4 aspect-square mb-4 break-inside-avoid-column relative overflow-hidden group" 
