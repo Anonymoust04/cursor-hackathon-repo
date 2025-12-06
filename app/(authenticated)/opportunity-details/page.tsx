@@ -132,16 +132,6 @@ export default async function OpportunityDetailsPage({
                 </div>
                 <div className="flex flex-col gap-3">
                   <button className="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 bg-primary text-primary-content gap-2 text-base font-bold leading-normal tracking-wide hover:bg-primary-dark transition-colors shadow-lg shadow-primary/30">Apply with your Impact Profile</button>
-                  <div className="grid grid-cols-2 gap-3">
-                    <button className="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-11 bg-background text-foreground gap-2 text-sm font-bold leading-normal tracking-wide border border-border hover:bg-secondary transition-colors">
-                      <span className="material-symbols-outlined text-xl">bookmark</span>
-                      Save for Later
-                    </button>
-                    <button className="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-11 bg-background text-foreground gap-2 text-sm font-bold leading-normal tracking-wide border border-border hover:bg-secondary transition-colors">
-                      <span className="material-symbols-outlined text-xl">share</span>
-                      Share
-                    </button>
-                  </div>
                 </div>
               </div>
             </div>

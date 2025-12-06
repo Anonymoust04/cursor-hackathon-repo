@@ -11,7 +11,8 @@ export const fallbackOpportunities = [
     cause_tags: ["Technology", "Social Impact"],
     tags: ["Full Time", "Remote"],
     icon: "person",
-    iconFilled: true
+    iconFilled: true,
+    imageUrl: "https://images.unsplash.com/photo-1586717791821-3f44a5638d48?w=800&auto=format&fit=crop&q=60"
   },
   {
     id: 'mock-2',
@@ -25,7 +26,8 @@ export const fallbackOpportunities = [
     cause_tags: ["Environment", "Marketing"],
     tags: ["Part Time", "Remote"],
     icon: "image",
-    iconFilled: false
+    iconFilled: false,
+    imageUrl: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&auto=format&fit=crop&q=60"
   },
   {
     id: 'mock-3',
@@ -39,7 +41,8 @@ export const fallbackOpportunities = [
     cause_tags: ["Community", "Environment"],
     tags: ["Volunteer"],
     icon: "image",
-    iconFilled: false
+    iconFilled: false,
+    imageUrl: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=800&auto=format&fit=crop&q=60"
   },
   {
     id: 'mock-4',
@@ -53,6 +56,7 @@ export const fallbackOpportunities = [
     cause_tags: ["Education", "Fundraising"],
     tags: ["Contract", "Remote"],
     icon: "image",
-    iconFilled: false
+    iconFilled: false,
+    imageUrl: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&auto=format&fit=crop&q=60"
   }
 ];

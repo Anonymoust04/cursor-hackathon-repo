@@ -54,6 +54,13 @@ export default function PostGigModal({ isOpen, onClose }: PostGigModalProps) {
     }
 
     try {
+      // Get current session for the access token
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        throw new Error('You must be logged in to post a gig');
+      }
+
       // Prepare payload
       const payload = {
         ...formData,
@@ -66,6 +73,7 @@ export default function PostGigModal({ isOpen, onClose }: PostGigModalProps) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
         },
         body: JSON.stringify(payload),
       });
