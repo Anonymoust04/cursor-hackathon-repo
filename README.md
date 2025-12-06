@@ -90,35 +90,56 @@ The system relies on a hierarchical permission model.
 * **Message Exchange:** Participants can send messages within threads they belong to.
 * **Notifications:** In-app notifications for application status changes and verifications.
 
-### Role Upgrade (Applier to Poster)
+### Profile Management
 
-* **Role Conversion:** Applier role users can upgrade their account to become a Poster, gaining access to all Poster functionality.
-* **Upgrade Process:** Users can request role upgrade through their profile settings or dashboard.
-* **Full Poster Access:** Once upgraded, users gain all Poster capabilities:
-    * Post new job opportunities
-    * Manage applications (accept, reject, verify)
-    * Generate QR codes for events
-    * Access poster dashboard and analytics
-    * Initiate conversations with applicants
-    * View analytics and impact metrics
-* **Dual Functionality:** Upgraded users maintain their ability to apply to other jobs (as a Poster is a superset of an Applier).
-* **Profile Update:** Role change updates the user's `profiles.role` field from `'applier'` to `'poster'` in the database.
+* **Separate Profiles:** Users can have both an `applicant_profiles` record and a `poster_profiles` record, allowing them to both apply for opportunities and post their own.
+* **Profile Creation:** During signup, users select their intent and a corresponding profile is created:
+    * "I want to find opportunities" → Creates `applicant_profiles` record
+    * "I want to organize initiatives" → Creates `poster_profiles` record
+* **Adding Additional Profile:** Users can create a second profile type later through their settings:
+    * Applicants can create a `poster_profiles` record to start posting opportunities
+    * Posters can create an `applicant_profiles` record to apply for other opportunities
+* **Profile Linking:** Both profile types use the same `auth.users.id`, allowing the system to link them for users who have both.
+* **Dual Functionality:** Users with both profiles can simultaneously:
+    * Apply to opportunities (via `applicant_profiles`)
+    * Post and manage their own opportunities (via `poster_profiles`)
 
 ## Database Schema
 
 ### Core Tables
 
-**Table: `profiles`**
+**Table: `applicant_profiles`**
 * `id` (PK, uuid)
-* `role` (enum: 'applier', 'poster')
+* `auth_user_id` (uuid, NOT NULL) - Links to auth.users.id (Supabase Auth user ID)
 * `full_name` (text)
 * `avatar_url` (text)
 * `impact_hours` (int)
+* `characteristics` (jsonb) - Applicant characteristics (skills, interests, bio, etc.)
+* `projects_completed` (uuid[]) - Array of completed project/job IDs
+* `projects_ongoing` (uuid[]) - Array of ongoing project/job IDs
+* `projects_applied_to` (uuid[]) - Array of job IDs the applicant has applied to
 * `onboarding_completed` (boolean)
+* `created_at` (timestamptz)
+* `updated_at` (timestamptz)
+
+**Table: `poster_profiles`**
+* `id` (PK, uuid)
+* `auth_user_id` (uuid, NOT NULL) - Links to auth.users.id (Supabase Auth user ID)
+* `organization_name` (text) - Name of the organization
+* `full_name` (text) - Contact person name
+* `avatar_url` (text)
+* `organization_description` (text)
+* `organization_data` (jsonb) - Additional organization info (website, social links, etc.)
+* `projects_completed` (uuid[]) - Array of completed job IDs
+* `projects_ongoing` (uuid[]) - Array of ongoing job IDs
+* `projects_inviting_applications` (uuid[]) - Array of job IDs currently accepting applications
+* `onboarding_completed` (boolean)
+* `created_at` (timestamptz)
+* `updated_at` (timestamptz)
 
 **Table: `jobs`**
 * `id` (PK, uuid)
-* `poster_id` (FK -> profiles.id)
+* `poster_id` (FK -> poster_profiles.id)
 * `title` (text)
 * `description` (text)
 * `status` (enum: 'open', 'closed', 'completed')
@@ -130,7 +151,7 @@ The system relies on a hierarchical permission model.
 **Table: `applications`**
 * `id` (PK, uuid)
 * `job_id` (FK -> jobs.id)
-* `applicant_id` (FK -> profiles.id)
+* `applicant_id` (FK -> applicant_profiles.id)
 * `status` (enum: 'pending', 'accepted', 'rejected', 'verified', 'withdrawn')
 * `verified_at` (timestamp)
 * `hours_awarded` (int)
@@ -139,27 +160,37 @@ The system relies on a hierarchical permission model.
 **Table: `attendances`**
 * `id` (PK, uuid)
 * `job_id` (FK -> jobs.id)
-* `applicant_id` (FK -> profiles.id)
+* `applicant_id` (FK -> applicant_profiles.id)
 * `application_id` (FK -> applications.id)
-* `scanned_at` (timestamp)
+* `scanner_id` (FK -> poster_profiles.id, nullable)
+* `scanned_at` (timestamptz)
 
 **Table: `threads`**
 * `id` (PK, uuid)
 * `job_id` (FK -> jobs.id, nullable)
-* `created_by` (FK -> profiles.id)
-* `created_at` (timestamp)
+* `created_by` (uuid) - Can be applicant_profiles.id or poster_profiles.id
+* `created_by_type` (text) - Either 'applicant' or 'poster'
+* `created_at` (timestamptz)
+
+**Table: `thread_participants`**
+* `thread_id` (FK -> threads.id)
+* `participant_id` (uuid) - Can be applicant_profiles.id or poster_profiles.id
+* `participant_type` (text) - Either 'applicant' or 'poster'
+* Primary Key: (thread_id, participant_id, participant_type)
 
 **Table: `messages`**
 * `id` (PK, uuid)
 * `thread_id` (FK -> threads.id)
-* `sender_id` (FK -> profiles.id)
+* `sender_id` (uuid) - Can be applicant_profiles.id or poster_profiles.id
+* `sender_type` (text) - Either 'applicant' or 'poster'
 * `body` (text)
-* `created_at` (timestamp)
-* `read_at` (timestamp)
+* `created_at` (timestamptz)
+* `read_at` (timestamptz)
 
 **Table: `notifications`**
 * `id` (PK, uuid)
-* `user_id` (FK -> profiles.id)
+* `user_id` (uuid) - Can be applicant_profiles.id or poster_profiles.id
+* `user_type` (text) - Either 'applicant' or 'poster'
 * `type` (text)
 * `payload` (jsonb)
 * `read_at` (timestamp)
@@ -169,19 +200,23 @@ The system relies on a hierarchical permission model.
 
 ### Authentication
 
-* `POST /api/auth/login` - Developer login (body: `{ secret, displayName, role }`)
-  * Verifies `secret === process.env.DEV_AUTH_SECRET`
-  * Generates `userId` server-side
-  * Upserts `profiles` row
-  * Sets signed cookie `sid` containing `{ userId, iat }`
+* `POST /api/auth/login` - Supabase login (body: `{ email, password }`)
+  * Authenticates user via Supabase Auth
+  * Returns session object
 * `POST /api/auth/logout` - Clears session cookie
-* `GET /api/auth/me` - Returns profile for current session
+* `GET /api/auth/me` - Returns profiles for current session
+  * Returns both `applicant` and `poster` profiles if they exist
+  * Returns `{ user, profiles: { applicant, poster }, hasApplicantProfile, hasPosterProfile }`
+* `POST /api/auth/create-profile` - Create a second profile type (body: `{ profileType: 'applicant' | 'poster', organizationName?: string, fullName?: string }`)
+  * Allows users who already have one profile type to create the other
+  * Requires authentication
+  * For poster profiles, `organizationName` is required
 
 ### Jobs
 
 * `GET /api/jobs` - Public job feed with pagination and optional filters (`type`, `cause`, `location`)
 * `GET /api/jobs/[id]` - Public job detail
-* `POST /api/jobs` - Create job (Poster only, validates `session.userId` and `profile.role == 'poster'`)
+* `POST /api/jobs` - Create job (Poster only, validates `session.userId` exists in `poster_profiles`)
 * `PATCH /api/jobs/[id]` - Update job (Owner only)
 * `DELETE /api/jobs/[id]` - Delete job (Owner only)
 
@@ -227,7 +262,7 @@ The system relies on a hierarchical permission model.
 
 * **Jobs Table:**
     * `SELECT`: Public
-    * `INSERT/UPDATE/DELETE`: Only users where `auth.uid() == poster_id` AND `profile.role == 'poster'`
+    * `INSERT/UPDATE/DELETE`: Only users where `auth.uid() == poster_id` (poster_id references poster_profiles)
 * **Applications Table:**
     * `INSERT`: Authenticated users (Appliers & Posters)
     * `UPDATE`: Only `poster_id` of the parent Job (to accept/verify) OR `applicant_id` (to withdraw)
@@ -273,6 +308,11 @@ pnpm install
 3. Set up environment variables:
 Create a `.env.local` file with the following:
 ```env
+# Supabase Configuration (Required)
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-project-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+
+# Optional: For custom auth/session management
 DEV_AUTH_SECRET=your-dev-auth-secret
 COOKIE_SIGNING_SECRET=your-cookie-signing-secret
 DEV_SESSION_TTL=604800
@@ -282,7 +322,7 @@ QR_SIGNING_SECRET=your-qr-signing-secret
 
 4. Run database migrations:
 Execute SQL scripts in order:
-* `supabase/sql/impl-01-auth.sql` - Creates `profiles` table and role enum
+* `supabase/sql/impl-01-auth.sql` - Creates `applicant_profiles` and `poster_profiles` tables
 * `supabase/sql/impl-02-jobs.sql` - Creates `jobs` table, enums, indexes (GIN on `cause_tags`)
 * `supabase/sql/impl-03-applications.sql` - Creates `applications` table and `prevent_self_apply()` trigger
 * `supabase/sql/impl-04-verification.sql` - Alters `applications` to add `verified_at` and `hours_awarded`
@@ -506,7 +546,7 @@ Each implementation document includes an acceptance checklist for verification.
 ### Key Implementation Files
 
 * `middleware.ts` - Cookie verification and route protection
-* `supabase/sql/impl-01-auth.sql` - Profiles table and role enum
+* `supabase/sql/impl-01-auth.sql` - Creates `applicant_profiles` and `poster_profiles` tables
 * `supabase/sql/impl-02-jobs.sql` - Jobs table and indexes
 * `supabase/sql/impl-03-applications.sql` - Applications table and self-apply trigger
 * `supabase/sql/impl-04-verification.sql` - Verification fields

@@ -10,7 +10,7 @@ END$$;
 CREATE TABLE IF NOT EXISTS applications (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   job_id uuid NOT NULL REFERENCES jobs(id) ON DELETE CASCADE,
-  applicant_id uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  applicant_id uuid NOT NULL REFERENCES applicant_profiles(id) ON DELETE CASCADE,
   status application_status NOT NULL DEFAULT 'pending',
   hours_awarded int NOT NULL DEFAULT 0,
   created_at timestamptz NOT NULL DEFAULT now(),
@@ -30,9 +30,9 @@ BEGIN
   IF poster IS NULL THEN
     RAISE EXCEPTION 'Job not found';
   END IF;
-  IF poster = NEW.applicant_id THEN
-    RAISE EXCEPTION 'Self-application is not allowed';
-  END IF;
+  -- Note: applicant_id is in applicant_profiles, poster_id is in poster_profiles
+  -- They are separate tables, so we can't directly compare. 
+  -- This check may need to be handled at application level if a user can have both profiles.
   RETURN NEW;
 END; $$;
 

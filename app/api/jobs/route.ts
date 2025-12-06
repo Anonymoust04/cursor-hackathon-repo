@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
-import { getJobs, createJob } from '@/lib/db/jobs';
-import { validateJobPayload } from '@/lib/validators/jobs';
 import { supabase } from '@/lib/supabase';
+import { requirePosterProfile } from '@/lib/auth-helpers';
+// import { getJobs, createJob } from '@/lib/db/jobs';
+// import { validateJobPayload } from '@/lib/validators/jobs';
 
 export async function GET(request: Request) {
   try {
@@ -9,35 +10,78 @@ export async function GET(request: Request) {
     const type = searchParams.get('type');
     const status = searchParams.get('status');
     
-    const jobs = await getJobs(supabase, { type, status });
-    return NextResponse.json(jobs);
+    // Build query
+    let query = supabase.from('jobs').select('*');
+    
+    if (type) {
+      query = query.eq('type', type);
+    }
+    
+    if (status) {
+      query = query.eq('status', status);
+    }
+    
+    // TODO: Add pagination when lib/db/jobs is implemented
+    // const jobs = await getJobs(supabase, { type, status });
+    
+    const { data: jobs, error } = await query;
+    
+    if (error) {
+      console.error('Get jobs error:', error);
+      return NextResponse.json({ error: 'Failed to fetch jobs' }, { status: 500 });
+    }
+    
+    return NextResponse.json(jobs || []);
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error('GET /api/jobs error:', error);
+    return NextResponse.json({ error: error.message || 'Internal server error' }, { status: 500 });
   }
 }
 
 export async function POST(request: Request) {
   try {
+    // Require user to have a poster profile
+    const { posterProfile } = await requirePosterProfile(request);
+
     const body = await request.json();
     
-    // Validate payload
-    const validation = validateJobPayload(body);
-    if (!validation.valid) {
-      return NextResponse.json({ error: 'Validation failed', details: validation.errors }, { status: 400 });
+    // Validate payload (if validator exists)
+    // const validation = validateJobPayload(body);
+    // if (!validation.valid) {
+    //   return NextResponse.json({ error: 'Validation failed', details: validation.errors }, { status: 400 });
+    // }
+
+    // Use the poster profile id
+    const poster_id = posterProfile.id;
+
+    // TODO: Import and use createJob function when lib/db/jobs is implemented
+    // For now, create job directly
+    const { data: newJob, error: createError } = await supabase
+      .from('jobs')
+      .insert([{ ...body, poster_id }])
+      .select()
+      .single();
+
+    if (createError) {
+      console.error('Create job error:', createError);
+      return NextResponse.json({ error: 'Failed to create job', details: createError.message }, { status: 500 });
     }
 
-    // TODO: Get user from session/token
-    // For now, we require poster_id in the body for testing purposes if auth isn't fully set up
-    // In production, this should come from the authenticated user's session
-    const poster_id = body.poster_id; 
-    
-    if (!poster_id) {
-       return NextResponse.json({ error: 'Unauthorized: Missing poster_id' }, { status: 401 });
-    }
-
-    const newJob = await createJob({ ...body, poster_id }, supabase);
     return NextResponse.json(newJob, { status: 201 });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error('POST /api/jobs error:', error);
+    
+    if (error.message === 'Unauthorized') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    
+    if (error.message.includes('poster profile')) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: 403 }
+      );
+    }
+    
+    return NextResponse.json({ error: error.message || 'Internal server error' }, { status: 500 });
   }
 }

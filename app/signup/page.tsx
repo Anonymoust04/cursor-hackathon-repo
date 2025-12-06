@@ -16,6 +16,7 @@ export default function SignupPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [role, setRole] = useState('Job Applicant');
   const [fullName, setFullName] = useState('');
+  const [organizationName, setOrganizationName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -44,6 +45,7 @@ export default function SignupPage() {
           password,
           fullName,
           role: role === 'Job Applicant' ? 'applier' : 'poster',
+          organizationName: role === 'Job Poster' ? organizationName : undefined,
         }),
       });
 
@@ -194,7 +196,7 @@ export default function SignupPage() {
                 </div>
               </div>
 
-              <div className="mb-6">
+              <div className="mb-4">
                 <label className="block mb-2 text-sm font-medium text-gray-600" htmlFor="role">
                   I am a
                 </label>
@@ -208,6 +210,23 @@ export default function SignupPage() {
                   <option>Job Poster</option>
                 </select>
               </div>
+
+              {role === 'Job Poster' && (
+                <div className="mb-4">
+                  <label className="block mb-2 text-sm font-medium text-gray-600" htmlFor="organizationName">
+                    Organization Name <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded text-gray-900 focus:ring-primary focus:border-primary outline-none focus:ring-2"
+                    id="organizationName"
+                    placeholder="GreenCorp Initiative"
+                    type="text"
+                    value={organizationName}
+                    onChange={(e) => setOrganizationName(e.target.value)}
+                    required={role === 'Job Poster'}
+                  />
+                </div>
+              )}
 
               <button
                 className="w-full bg-primary text-white font-bold py-3 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-300 cursor-pointer disabled:opacity-50"
