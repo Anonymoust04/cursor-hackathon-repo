@@ -10,9 +10,9 @@ CREATE TABLE IF NOT EXISTS applicant_profiles (
   avatar_url text,
   impact_hours int NOT NULL DEFAULT 0,
   characteristics jsonb, -- Store applicant characteristics (skills, interests, bio, etc.)
-  projects_completed uuid[], -- Array of completed project/job IDs
-  projects_ongoing uuid[], -- Array of ongoing project/job IDs (from applications with status 'accepted')
-  projects_applied_to uuid[], -- Array of job IDs the applicant has applied to
+  projects_completed uuid[], -- Array of completed project IDs (references projects.id)
+  projects_ongoing uuid[], -- Array of ongoing project IDs (from applications with status 'accepted')
+  projects_applied_to uuid[], -- Array of project IDs the applicant has applied to
   onboarding_completed boolean NOT NULL DEFAULT false,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now()
@@ -30,9 +30,9 @@ CREATE TABLE IF NOT EXISTS poster_profiles (
   avatar_url text,
   organization_description text,
   organization_data jsonb, -- Additional organization info (website, social links, etc.)
-  projects_completed uuid[], -- Array of completed job IDs
-  projects_ongoing uuid[], -- Array of ongoing job IDs (jobs with status 'open')
-  projects_inviting_applications uuid[], -- Array of job IDs currently accepting applications
+  projects_completed uuid[], -- Array of completed project IDs (references projects.id)
+  projects_ongoing uuid[], -- Array of ongoing project IDs (projects with is_ongoing = true)
+  projects_inviting_applications uuid[], -- Array of project IDs currently accepting applications (is_accepting_applications = true)
   onboarding_completed boolean NOT NULL DEFAULT false,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now()
