@@ -2,6 +2,7 @@ import { getJobById } from '@/lib/db/jobs';
 import { fallbackOpportunities } from '@/lib/mock-data';
 import JobTabs from './JobTabs';
 import GoogleMap from '@/components/GoogleMap';
+import CompanyLogo from './CompanyLogo';
 
 export default async function OpportunityDetailsPage({
   searchParams,
@@ -35,7 +36,9 @@ export default async function OpportunityDetailsPage({
     time_commitment: "5-10 hours / week",
     requirements: "No prior gardening experience required. Willingness to work outdoors and get hands dirty. Team player attitude.",
     benefits: "Learn about urban agriculture. Meet like-minded community members. Take home fresh produce.",
-    company_description: "GreenCorp Initiative is a non-profit organization dedicated to creating sustainable urban green spaces."
+    company_description: "GreenCorp Initiative is a non-profit organization dedicated to creating sustainable urban green spaces.",
+    image_url: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=1200&h=400&fit=crop",
+    company_logo_url: "https://via.placeholder.com/64?text=GreenCorp"
   };
 
   const displayJob = job ? {
@@ -50,7 +53,9 @@ export default async function OpportunityDetailsPage({
     time_commitment: (job as any).time_commitment || 'TBD',
     requirements: (job as any).requirements,
     benefits: (job as any).benefits,
-    company_description: (job as any).company_description
+    company_description: (job as any).company_description,
+    image_url: (job as any).image_url || fallbackJob.image_url,
+    company_logo_url: (job as any).company_logo_url || fallbackJob.company_logo_url
   } : fallbackJob;
 
   return (
@@ -64,12 +69,16 @@ export default async function OpportunityDetailsPage({
           </div>
           <div 
             className="bg-cover bg-center flex flex-col justify-end overflow-hidden rounded-xl min-h-[280px]" 
-            data-alt="Volunteers working in a lush community garden with sun shining through the trees." 
-            style={{ backgroundImage: 'linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 40%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuDd4OaiLwt-dwls9l3FBP3KfgY0qr3t0B47TzgIyCW94tC6xPq61VTxE88l5VmH8YZjvoCLpAyjTr69l6LeHbd42i4nWum_n3NE4UImDn7hVVMmzaNoXsbElHUNKjY1Z_zZT6hEExY4YCwSf1p8ZjnIqfRrVOSAqtUe3T0jj58iTuhJJavkulT3RP2a2nL4kspNqXq20zSq7WFV0NxIXy2TKNGkPZyOeDUGyNd6GFOS3GKUG3ss8e0mT1el6SV1YM69nqJdwd1yfWI")' }}
+            data-alt={displayJob.title}
+            style={{ backgroundImage: `linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 40%), url("${displayJob.image_url}")` }}
           >
             <div className="flex items-end p-6 gap-4">
               <div className="flex items-center justify-center size-16 bg-white rounded-lg p-2">
-                <img alt="GreenCorp Logo" className="h-full w-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHIjmR4iVrIhG0MyG4-9L4jfN3tck_djbgJqT7RBgym2fAxuRzhDI_yt6Z-g7LQiMUp4qhyF4DOeOTJcPe1x606xsobapA2SHTaoD3X_J0LDOCDo1oKmmqfUS1kxtpTW4loUpMvqT9QDkNFW4QjhPXbBRznIZF5-Fq_wQ81T1HNLq5YGBf-XfIgr_zuMc4kxCC7dAw6bsUGrpa-zu9Ba34L6th9njjksMlX78dmi2mGr4N9vMbAoq-jD9PIbg3TxGdpbBSCy69xV0"/>
+                <CompanyLogo 
+                  alt={`${displayJob.company} Logo`} 
+                  className="h-full w-full object-contain" 
+                  src={displayJob.company_logo_url}
+                />
               </div>
               <div>
                 <h1 className="text-white tracking-tight text-3xl font-bold leading-tight">{displayJob.title}</h1>
