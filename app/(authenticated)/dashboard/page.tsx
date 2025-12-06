@@ -1,5 +1,118 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabase';
+import { getUserProfiles, ApplicantProfile, PosterProfile } from '@/lib/profiles';
+import { getProjectsByIds, getAllProjectIdsFromProfiles, Project } from '@/lib/projects';
+
+interface DashboardData {
+  user: {
+    email: string | undefined;
+  } | null;
+  applicantProfile: ApplicantProfile | null;
+  posterProfile: PosterProfile | null;
+  projects: Project[];
+  totalProjectsCompleted: number;
+  totalHours: number;
+}
 
 export default function DashboardPage() {
+  const [data, setData] = useState<DashboardData>({
+    user: null,
+    applicantProfile: null,
+    posterProfile: null,
+    projects: [],
+    totalProjectsCompleted: 0,
+    totalHours: 0,
+  });
+  const [isLoading, setIsLoading] = useState(true);
+  const [activeFilter, setActiveFilter] = useState<'all' | 'projects' | 'badges' | 'skills'>('all');
+
+  useEffect(() => {
+    async function loadDashboardData() {
+      try {
+        // Get current user session
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        
+        if (sessionError || !session?.user) {
+          console.error('No session found');
+          setIsLoading(false);
+          return;
+        }
+
+        // Get user profiles
+        const profiles = await getUserProfiles(session.user.id);
+
+        // Calculate total projects completed (from both profiles)
+        const applicantCompleted = profiles.applicant?.projects_completed?.length || 0;
+        const posterCompleted = profiles.poster?.projects_completed?.length || 0;
+        const totalProjectsCompleted = applicantCompleted + posterCompleted;
+
+        // Get total hours (from applicant profile only)
+        const totalHours = profiles.applicant?.impact_hours || 0;
+
+        // Get all unique project IDs from both profiles
+        const allProjectIds = getAllProjectIdsFromProfiles(
+          profiles.applicant,
+          profiles.poster
+        );
+
+        // Fetch all projects
+        const projects = await getProjectsByIds(allProjectIds);
+
+        setData({
+          user: { email: session.user.email },
+          applicantProfile: profiles.applicant,
+          posterProfile: profiles.poster,
+          projects,
+          totalProjectsCompleted,
+          totalHours,
+        });
+      } catch (error) {
+        console.error('Error loading dashboard data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    loadDashboardData();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <main className="px-4 sm:px-8 md:px-20 lg:px-40 flex flex-1 justify-center py-5">
+        <div className="flex items-center justify-center h-64">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+        </div>
+      </main>
+    );
+  }
+
+  // Determine display name and bio
+  const displayName = 
+    data.applicantProfile?.full_name || 
+    data.posterProfile?.full_name || 
+    data.posterProfile?.organization_name || 
+    'User';
+  
+  const displayBio = 
+    data.applicantProfile?.characteristics?.bio || 
+    data.posterProfile?.organization_description || 
+    'No bio available.';
+
+  // Get avatar URL
+  const avatarUrl = 
+    data.applicantProfile?.avatar_url || 
+    data.posterProfile?.avatar_url || 
+    '';
+
+  // Filter projects based on active filter
+  const displayedProjects = data.projects.filter(project => {
+    if (activeFilter === 'all') return true;
+    if (activeFilter === 'projects') return true; // Show all projects for now
+    return false; // Badges and skills not implemented yet
+  });
+
   return (
     <main className="px-4 sm:px-8 md:px-20 lg:px-40 flex flex-1 justify-center py-5">
       <div className="layout-content-container flex flex-col w-full max-w-7xl flex-1 gap-8">
@@ -8,29 +121,41 @@ export default function DashboardPage() {
             <div className="flex w-full flex-col gap-6 @[520px]:flex-row @[520px]:justify-between @[520px]:items-center">
               <div className="flex gap-6 items-center">
                 <div 
-                  className="bg-center bg-no-repeat aspect-square bg-cover rounded-full min-h-32 w-32 shrink-0" 
-                  data-alt="Profile picture of Alex Chen" 
-                  style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuCW5dg2PMOoBMVSIbO2eFO_nTA8G2t5GJg5i9STwluE8RNq1EKxjL8rnJ4bQI4gX-ALmnr8tYPTO83VOwM4C5mHmDbl_MHKZr9u2xE8I3_pPtIeThOzCESp3JjtIAUw2LbQF2Tb4pI2gpKJTK-n8DjSwJtquIbX6_YsGhNjUeldAFVDDcdqMNaWyiHUHLiW1qhEo9uEBjuzt5N8n_WdvGCbbitpfiEwlspHnZppTGNDVxN5yII4lRPevdUvlTWSyRLjU4hTD8I5KT0")' }}
+                  className="bg-center bg-no-repeat aspect-square bg-cover rounded-full min-h-32 w-32 shrink-0 bg-gray-200" 
+                  data-alt={`Profile picture of ${displayName}`}
+                  style={avatarUrl ? { backgroundImage: `url("${avatarUrl}")` } : {}}
                 ></div>
                 <div className="flex flex-col justify-center">
-                  <p className="text-text-light text-[28px] font-bold leading-tight tracking-[-0.015em]">Alex Chen</p>
-                  <p className="text-gray-500 text-base font-normal leading-normal mt-1">Connecting social impact with student innovation. Passionate about sustainable development and community building.</p>
+                  <p className="text-text-light text-[28px] font-bold leading-tight tracking-[-0.015em]">{displayName}</p>
+                  {data.posterProfile?.organization_name && data.applicantProfile && (
+                    <p className="text-gray-400 text-sm mt-1">
+                      {data.posterProfile.organization_name}
+                    </p>
+                  )}
+                  <p className="text-gray-500 text-base font-normal leading-normal mt-1">{displayBio}</p>
                 </div>
               </div>
-
             </div>
           </div>
         </section>
         <section>
           <div className="flex flex-wrap gap-4 px-4 py-3">
             <div className="flex min-w-[140px] flex-1 basis-[fit-content] flex-col gap-2 rounded-xl border border-border-light bg-white p-4 items-start shadow-sm">
-              <p className="text-text-light tracking-light text-3xl font-bold leading-tight">12</p>
+              <p className="text-text-light tracking-light text-3xl font-bold leading-tight">{data.totalProjectsCompleted}</p>
               <div className="flex items-center gap-2"><p className="text-gray-500 text-sm font-normal leading-normal">Projects Completed</p></div>
             </div>
-            <div className="flex min-w-[140px] flex-1 basis-[fit-content] flex-col gap-2 rounded-xl border border-border-light bg-white p-4 items-start shadow-sm">
-              <p className="text-text-light tracking-light text-3xl font-bold leading-tight">1,200</p>
-              <div className="flex items-center gap-2"><p className="text-gray-500 text-sm font-normal leading-normal">Hours Volunteered</p></div>
-            </div>
+            {data.applicantProfile && (
+              <div className="flex min-w-[140px] flex-1 basis-[fit-content] flex-col gap-2 rounded-xl border border-border-light bg-white p-4 items-start shadow-sm">
+                <p className="text-text-light tracking-light text-3xl font-bold leading-tight">{data.totalHours.toLocaleString()}</p>
+                <div className="flex items-center gap-2"><p className="text-gray-500 text-sm font-normal leading-normal">Hours Volunteered</p></div>
+              </div>
+            )}
+            {data.posterProfile && (
+              <div className="flex min-w-[140px] flex-1 basis-[fit-content] flex-col gap-2 rounded-xl border border-border-light bg-white p-4 items-start shadow-sm">
+                <p className="text-text-light tracking-light text-3xl font-bold leading-tight">{data.posterProfile.projects_inviting_applications?.length || 0}</p>
+                <div className="flex items-center gap-2"><p className="text-gray-500 text-sm font-normal leading-normal">Active Projects</p></div>
+              </div>
+            )}
           </div>
         </section>
         <section className="border-t border-border-light pt-8">
