@@ -20,7 +20,8 @@ export default async function OpportunityMarketplace({
     tags: [...(job.cause_tags || []), job.type.charAt(0).toUpperCase() + job.type.slice(1)],
     icon: 'work', // Default icon
     iconFilled: false,
-    location: job.location
+    location: job.location,
+    imageUrl: job.image_url || undefined
   })) || [];
 
   if (opportunities.length === 0 && !q) {
