@@ -2,8 +2,13 @@ import Link from 'next/link';
 import { getJobs } from '@/lib/db/jobs';
 import { fallbackOpportunities } from '@/lib/mock-data';
 
-export default async function OpportunityMarketplace() {
-  const jobs = await getJobs().catch(() => []);
+export default async function OpportunityMarketplace({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+}) {
+  const { q } = await searchParams;
+  const jobs = await getJobs(undefined, { search: q }).catch(() => []);
 
   let opportunities = jobs?.map((job: any) => ({
     id: job.id,
@@ -15,7 +20,7 @@ export default async function OpportunityMarketplace() {
     iconFilled: false
   })) || [];
 
-  if (opportunities.length === 0) {
+  if (opportunities.length === 0 && !q) {
     opportunities = fallbackOpportunities;
   }
 
@@ -27,16 +32,22 @@ export default async function OpportunityMarketplace() {
       </div>
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 -mt-12">
         <div className="bg-white rounded-xl shadow-lg p-2 border border-slate-200">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 items-center gap-2">
+          <form action="/opportunity-marketplace" method="get" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 items-center gap-2">
             <div className="relative lg:col-span-3">
               <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
-              <input className="w-full h-12 pl-10 pr-4 rounded-lg border-transparent focus:ring-primary focus:border-primary" placeholder="Job title or keyword" type="text" />
+              <input 
+                name="q"
+                defaultValue={q}
+                className="w-full h-12 pl-10 pr-4 rounded-lg border-transparent focus:ring-primary focus:border-primary" 
+                placeholder="Job title or keyword" 
+                type="text" 
+              />
             </div>
             <div className="flex items-center gap-4 lg:col-span-2 justify-end">
-              <button className="text-sm font-medium text-text-secondary hover:text-primary px-4">Clear</button>
-              <button className="flex-1 lg:flex-none h-12 rounded-lg bg-primary text-white font-semibold hover:bg-opacity-90 px-8">Search</button>
+              <Link href="/opportunity-marketplace" className="text-sm font-medium text-text-secondary hover:text-primary px-4">Clear</Link>
+              <button type="submit" className="flex-1 lg:flex-none h-12 rounded-lg bg-primary text-white font-semibold hover:bg-opacity-90 px-8">Search</button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
       <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-8">

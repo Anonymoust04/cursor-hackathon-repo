@@ -30,7 +30,8 @@ export default async function OpportunityDetailsPage({
     type: "Volunteer",
     start_time: "June 1",
     end_time: "August 31",
-    cause_tags: ["Environment", "Community"]
+    cause_tags: ["Environment", "Community"],
+    time_commitment: "5-10 hours / week"
   };
 
   const displayJob = job ? {
@@ -41,7 +42,8 @@ export default async function OpportunityDetailsPage({
     type: job.type.charAt(0).toUpperCase() + job.type.slice(1),
     start_time: job.start_time ? new Date(job.start_time).toLocaleDateString() : 'TBD',
     end_time: job.end_time ? new Date(job.end_time).toLocaleDateString() : 'TBD',
-    cause_tags: job.cause_tags || []
+    cause_tags: job.cause_tags || [],
+    time_commitment: (job as any).time_commitment || 'TBD'
   } : fallbackJob;
 
   return (
@@ -90,14 +92,6 @@ export default async function OpportunityDetailsPage({
               </div>
               <div className="prose prose-base max-w-none text-foreground pt-4 space-y-4">
                 <p>{displayJob.description}</p>
-                <h3 className="text-foreground">Project Mission &amp; Goals</h3>
-                <ul className="list-disc pl-5">
-                  <li>To increase access to nutritious food for local residents.</li>
-                  <li>To create a beautiful, safe, and inclusive gathering place for the community.</li>
-                  <li>To provide hands-on learning opportunities about gardening, composting, and environmental stewardship.</li>
-                  <li>To foster intergenerational connections and promote a sense of shared community ownership.</li>
-                </ul>
-                <p>As a volunteer, you will be at the heart of this transformation, working alongside community members and our team to bring this vision to life. Your contribution will have a lasting impact, creating a legacy of sustainability and community pride.</p>
                 <div className="pt-4">
                   <h3 className="text-foreground text-lg font-bold mb-3">Location</h3>
                   <div className="aspect-video w-full rounded-lg overflow-hidden border border-border">
@@ -121,7 +115,7 @@ export default async function OpportunityDetailsPage({
                       <span className="material-symbols-outlined text-primary mt-1">schedule</span>
                       <div>
                         <p className="font-bold text-sm">Time Commitment</p>
-                        <p className="text-sm">5-10 hours / week</p>
+                        <p className="text-sm">{displayJob.time_commitment}</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-4">
