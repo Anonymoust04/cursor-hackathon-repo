@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Roboto } from 'next/font/google';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabase';
 
 const roboto = Roboto({
   weight: ['400', '500', '700'],
@@ -27,26 +28,15 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const response = await fetch('/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Login failed');
+      if (error) {
+        throw error;
       }
 
-      // Redirect or show success message
-      // For now, we'll just redirect to a dashboard or home page
-      // Since we don't have a dashboard yet, maybe just alert or log
       console.log('Login successful:', data);
       router.push('/dashboard');
     } catch (err: any) {
