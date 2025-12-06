@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Opportunity Details &amp; Apply</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": {
+                  DEFAULT: "#0052FF",
+                  "content": "#FFFFFF",
+                  "dark": "#003ECC",
+                  "light": "#E5EFFF"
+              },
+              "secondary": {
+                  DEFAULT: "#F0F5FF",
+                  "dark": "#E5EFFF"
+              },
+              "background": {
+                  DEFAULT: "#FFFFFF",
+                  "dark": "#0F172A"
+              },
+              "foreground": {
+                  DEFAULT: "#0F172A",
+                  "dark": "#F8FAFC"
+              },
+              "border": {
+                  DEFAULT: "#E2E8F0",
+                  "dark": "#1E293B"
+              },
+              "muted": {
+                  DEFAULT: "#64748B",
+                  "dark": "#94A3B8"
+              }
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-secondary dark:bg-background-dark font-display text-foreground dark:text-foreground-dark">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="sticky top-0 z-50 flex justify-center bg-background/80 dark:bg-background-dark/80 backdrop-blur-sm border-b border-border dark:border-border-dark">
+<div class="flex w-full max-w-7xl items-center justify-between whitespace-nowrap px-4 py-3">
+<div class="flex items-center gap-2 text-foreground dark:text-foreground-dark">
+<div class="size-8 text-primary">
+<svg fill="none" height="32" viewBox="0 0 34 32" width="34" xmlns="http://www.w3.org/2000/svg">
+<path d="M19.9208 0.464111L7.96575 18.1008H16.8929L13.8425 31.5359L25.7975 13.8992H16.8703L19.9208 0.464111Z" fill="#0052FF"></path>
+<path d="M16.9298 13.8347L13.8794 31.3965L25.7975 13.8347H16.9298Z" fill="#003ECC"></path>
+<path d="M25.7951 13.8992H16.8679L19.9184 0.464111L7.96338 18.1008H16.8905L13.8401 31.5359" stroke="#0052FF" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.75"></path>
+<path d="M30.4132 5.01172C32.0945 5.01172 33.4688 3.88916 33.4688 2.50586C33.4688 1.12256 32.0945 0 30.4132 0C28.7319 0 27.3575 1.12256 27.3575 2.50586C27.3575 3.88916 28.7319 5.01172 30.4132 5.01172Z" fill="#CBB384"></path>
+<path d="M22.5693 7.85938C24.2505 7.85938 25.6249 6.73682 25.6249 5.35352C25.6249 3.97021 24.2505 2.84766 22.5693 2.84766C20.888 2.84766 19.5137 3.97021 19.5137 5.35352C19.5137 6.73682 20.888 7.85938 22.5693 7.85938Z" fill="#CBB384"></path>
+<path d="M3.58679 26.9883C5.26807 26.9883 6.64246 25.8657 6.64246 24.4824C6.64246 23.0991 5.26807 21.9766 3.58679 21.9766C1.90552 21.9766 0.531128 23.0991 0.531128 24.4824C0.531128 25.8657 1.90552 26.9883 3.58679 26.9883Z" fill="#CBB384"></path>
+<path d="M11.4307 24.1406C13.1119 24.1406 14.4863 23.0181 14.4863 21.6348C14.4863 20.2515 13.1119 19.1289 11.4307 19.1289C9.74939 19.1289 8.375 20.2515 8.375 21.6348C8.375 23.0181 9.74939 24.1406 11.4307 24.1406Z" fill="#CBB384"></path>
+</svg>
+</div>
+<h2 class="text-xl font-bold tracking-tight">ImpactHub</h2>
+</div>
+<div class="flex flex-1 justify-end items-center gap-6">
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium text-muted dark:text-muted-dark hover:text-foreground dark:hover:text-foreground-dark transition-colors" href="#">Dashboard</a>
+<a class="text-sm font-medium text-foreground dark:text-foreground-dark font-bold" href="#">Opportunities</a>
+<a class="text-sm font-medium text-muted dark:text-muted-dark hover:text-foreground dark:hover:text-foreground-dark transition-colors" href="#">Profile</a>
+</nav>
+<button class="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-secondary dark:bg-border-dark text-foreground dark:text-foreground-dark">
+<span class="material-symbols-outlined text-xl">notifications</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB4h7HsCszSFMohWL4gI4EpyypWHZHFQIOBL4o0cbiloX9B6bpVhoeH-OQVLC8vpbYQeE-ssXmHu7gZgGPVY168OWBUhpvM3C2ip59lJ_wjBK5CBNhE5zvYcXWmhVRwgVyJuN4lYIA501ec1nJw9WzJNn07CR8t9glT0VA8tSpZdN5AFgtPTVQRmZJb8i2hvaqDo_dwKu_Yb9IP0tKc4nsunBQXhF6OdlUUevR2hoePNyebosqClsJ44CLa-SvQy-8HyEpfHRif9LU");'></div>
+</div>
+</div>
+</header>
+<main class="flex flex-1 justify-center bg-background dark:bg-background-dark py-8 px-4">
+<div class="layout-content-container flex flex-col w-full max-w-7xl">
+<div class="flex flex-wrap gap-2 pb-6">
+<a class="text-muted dark:text-muted-dark text-sm font-medium leading-normal hover:text-primary" href="#">Opportunities</a>
+<span class="text-muted dark:text-muted-dark text-sm font-medium leading-normal">/</span>
+<a class="text-muted dark:text-muted-dark text-sm font-medium leading-normal hover:text-primary" href="#">Search Results</a>
+<span class="text-muted dark:text-muted-dark text-sm font-medium leading-normal">/</span>
+<span class="text-foreground dark:text-foreground-dark text-sm font-medium leading-normal">Community Garden Revitalization Project</span>
+</div>
+<div class="bg-cover bg-center flex flex-col justify-end overflow-hidden rounded-xl min-h-[280px]" data-alt="Volunteers working in a lush community garden with sun shining through the trees." style='background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 40%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuDd4OaiLwt-dwls9l3FBP3KfgY0qr3t0B47TzgIyCW94tC6xPq61VTxE88l5VmH8YZjvoCLpAyjTr69l6LeHbd42i4nWum_n3NE4UImDn7hVVMmzaNoXsbElHUNKjY1Z_zZT6hEExY4YCwSf1p8ZjnIqfRrVOSAqtUe3T0jj58iTuhJJavkulT3RP2a2nL4kspNqXq20zSq7WFV0NxIXy2TKNGkPZyOeDUGyNd6GFOS3GKUG3ss8e0mT1el6SV1YM69nqJdwd1yfWI");'>
+<div class="flex items-end p-6 gap-4">
+<div class="flex items-center justify-center size-16 bg-white rounded-lg p-2">
+<img alt="GreenCorp Logo" class="h-full w-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHIjmR4iVrIhG0MyG4-9L4jfN3tck_djbgJqT7RBgym2fAxuRzhDI_yt6Z-g7LQiMUp4qhyF4DOeOTJcPe1x606xsobapA2SHTaoD3X_J0LDOCDo1oKmmqfUS1kxtpTW4loUpMvqT9QDkNFW4QjhPXbBRznIZF5-Fq_wQ81T1HNLq5YGBf-XfIgr_zuMc4kxCC7dAw6bsUGrpa-zu9Ba34L6th9njjksMlX78dmi2mGr4N9vMbAoq-jD9PIbg3TxGdpbBSCy69xV0"/>
+</div>
+<div>
+<h1 class="text-white tracking-tight text-3xl font-bold leading-tight">Community Garden Revitalization Project</h1>
+<p class="text-white/90 text-lg">GreenCorp Initiative</p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+<div class="lg:col-span-2">
+<div class="pb-3">
+<div class="flex border-b border-border dark:border-border-dark gap-8">
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-primary text-primary pb-[13px] pt-4" href="#">
+<p class="text-sm font-bold leading-normal tracking-[0.015em]">Description</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-muted dark:text-muted-dark hover:text-foreground dark:hover:text-foreground-dark pb-[13px] pt-4 transition-colors" href="#">
+<p class="text-sm font-bold leading-normal tracking-[0.015em]">Requirements</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-muted dark:text-muted-dark hover:text-foreground dark:hover:text-foreground-dark pb-[13px] pt-4 transition-colors" href="#">
+<p class="text-sm font-bold leading-normal tracking-[0.015em]">What You'll Gain</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-muted dark:text-muted-dark hover:text-foreground dark:hover:text-foreground-dark pb-[13px] pt-4 transition-colors" href="#">
+<p class="text-sm font-bold leading-normal tracking-[0.015em]">About GreenCorp</p>
+</a>
+</div>
+</div>
+<div class="prose prose-base dark:prose-invert max-w-none text-foreground dark:text-foreground-dark pt-4 space-y-4">
+<p>Join us in transforming an underused urban space into a vibrant community garden. This project aims to create a green oasis that provides fresh, local produce, fosters community engagement, and serves as an educational hub for sustainable urban agriculture. We believe in the power of green spaces to build stronger, healthier communities.</p>
+<h3 class="text-foreground dark:text-foreground-dark">Project Mission &amp; Goals</h3>
+<ul class="list-disc pl-5">
+<li>To increase access to nutritious food for local residents.</li>
+<li>To create a beautiful, safe, and inclusive gathering place for the community.</li>
+<li>To provide hands-on learning opportunities about gardening, composting, and environmental stewardship.</li>
+<li>To foster intergenerational connections and promote a sense of shared community ownership.</li>
+</ul>
+<p>As a volunteer, you will be at the heart of this transformation, working alongside community members and our team to bring this vision to life. Your contribution will have a lasting impact, creating a legacy of sustainability and community pride.</p>
+<div class="pt-4">
+<h3 class="text-foreground dark:text-foreground-dark text-lg font-bold mb-3">Location</h3>
+<div class="aspect-video w-full rounded-lg overflow-hidden border border-border dark:border-border-dark">
+<img class="w-full h-full object-cover" data-alt="A map showing the project location in downtown." data-location="City Center Park" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAftR3o1i10kUzKwnWzC4FUlNfaBKUkw9YsDi5VHgsXDdUFhILywvVkVLzWDRMnOq8e-fohkyQ7NPocGxNQn8zPV9n5UjN9Tr73w8OS80scVhsr79r2OwgPe-0Fy5OzIAOlgKDXgrqJblWSV2QVnhcr6SpG_WEA9TSpxB_8y9_edK7YGAhbHYYd_DDHPbGae9jWJ9i5C8B1ZkfaOQQZxgyPBOM8eORo9Ssx1IDx6YEhIFKdOOr7Rojwx6UcSUmm5VTO7hup9_UrK6U"/>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-1">
+<div class="sticky top-28 space-y-4">
+<div class="bg-background dark:bg-border-dark/30 border border-border dark:border-border-dark rounded-xl p-6 space-y-5">
+<div class="space-y-4">
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-primary mt-1">calendar_today</span>
+<div>
+<p class="font-bold text-sm">Duration</p>
+<p class="text-sm">June 1 - August 31</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-primary mt-1">schedule</span>
+<div>
+<p class="font-bold text-sm">Time Commitment</p>
+<p class="text-sm">5-10 hours / week</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-primary mt-1">location_on</span>
+<div>
+<p class="font-bold text-sm">Location</p>
+<p class="text-sm">On-site, City Center Park</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-primary mt-1">work</span>
+<div>
+<p class="font-bold text-sm">Opportunity Type</p>
+<p class="text-sm">Volunteer</p>
+</div>
+</div>
+</div>
+<div class="border-t border-border dark:border-border-dark pt-5">
+<p class="text-center text-sm font-medium">Applications close in <span class="text-primary font-bold">12 days</span></p>
+</div>
+</div>
+<div class="flex flex-col gap-3">
+<button class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 bg-primary text-primary-content gap-2 text-base font-bold leading-normal tracking-wide hover:bg-primary-dark transition-colors shadow-lg shadow-primary/30">Apply with your Impact Profile</button>
+<div class="grid grid-cols-2 gap-3">
+<button class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-11 bg-background text-foreground gap-2 text-sm font-bold leading-normal tracking-wide border border-border hover:bg-secondary dark:bg-border-dark/50 dark:text-foreground-dark dark:hover:bg-border-dark/80 dark:border-border-dark transition-colors">
+<span class="material-symbols-outlined text-xl">bookmark</span>
+                                            Save for Later
+                                        </button>
+<button class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-11 bg-background text-foreground gap-2 text-sm font-bold leading-normal tracking-wide border border-border hover:bg-secondary dark:bg-border-dark/50 dark:text-foreground-dark dark:hover:bg-border-dark/80 dark:border-border-dark transition-colors">
+<span class="material-symbols-outlined text-xl">share</span>
+                                            Share
+                                        </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="bg-secondary dark:bg-border-dark/30 mt-16 border-t border-border dark:border-border-dark">
+<div class="w-full max-w-7xl mx-auto py-8 px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+<p class="text-sm text-muted dark:text-muted-dark">© 2024 ImpactHub. All rights reserved.</p>
+<div class="flex gap-6">
+<a class="text-sm font-medium text-foreground dark:text-foreground-dark hover:underline" href="#">About Us</a>
+<a class="text-sm font-medium text-foreground dark:text-foreground-dark hover:underline" href="#">FAQ</a>
+<a class="text-sm font-medium text-foreground dark:text-foreground-dark hover:underline" href="#">Contact</a>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</body></html>
