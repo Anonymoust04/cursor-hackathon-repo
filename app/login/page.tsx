@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Roboto } from 'next/font/google';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const roboto = Roboto({
   weight: ['400', '500', '700'],
@@ -12,6 +13,7 @@ const roboto = Roboto({
 });
 
 export default function LoginPage() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState('Job Applicant');
   const [email, setEmail] = useState('');
@@ -46,7 +48,7 @@ export default function LoginPage() {
       // For now, we'll just redirect to a dashboard or home page
       // Since we don't have a dashboard yet, maybe just alert or log
       console.log('Login successful:', data);
-      // window.location.href = '/dashboard'; 
+      router.push('/dashboard');
     } catch (err: any) {
       setError(err.message);
     } finally {
