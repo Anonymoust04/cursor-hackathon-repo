@@ -1,28 +1,22 @@
-# Product Requirements Document: ImpactHub
+# ImpactHub
 
-| Version | Date | Status | Author |
-| :--- | :--- | :--- | :--- |
-| 1.0 | Dec 06, 2025 | **Finalized** | Product Team |
-
----
-
-## 1. Executive Summary
 **ImpactHub** is a dual-sided marketplace and networking platform that bridges the gap between students (B2C) and Corporate Social Responsibility (CSR) initiatives (B2B). It functions as a "LinkedIn for Impact," allowing users to build verified portfolios of community service and gig work while enabling organizations and student leaders to recruit talent for initiatives.
 
-## 2. Core Value Proposition
+## Core Value Proposition
+
 * **For Job Appliers (Students):** A centralized, verified "Impact Resume" for college/job applications and access to paid/volunteer opportunities.
 * **For Job Posters (CSR/Student Leaders):** A streamlined tool to recruit volunteers/gig workers, track impact hours, and generate ESG data.
 
----
+## User Roles & Permissions
 
-## 3. User Roles & Permissions
 The system relies on a hierarchical permission model.
 
-### 3.1 Roles
-1.  **Job Applier (Standard User):** The default role for students.
-2.  **Job Poster (Power User/Admin):** The role for Student Leaders, NGOs, or Corporate CSR Managers.
+### Roles
 
-### 3.2 Permission Matrix
+1. **Job Applier (Standard User):** The default role for students.
+2. **Job Poster (Power User/Admin):** The role for Student Leaders, NGOs, or Corporate CSR Managers.
+
+### Permission Matrix
 
 | Feature / Action | **Job Applier** | **Job Poster** |
 | :--- | :---: | :---: |
@@ -36,23 +30,32 @@ The system relies on a hierarchical permission model.
 | **Verify Completion (QR/Manual)** | ❌ | ✅ |
 | **View Analytics** | ❌ | ✅ |
 
-> **Critical Logic Note:** A **Job Poster** is a superset of an Applier. A Poster can manage their own events but can also apply to *other* events (e.g., a student leader running a club can still volunteer for a separate beach cleanup).
+**Critical Logic Note:** A **Job Poster** is a superset of an Applier. A Poster can manage their own events but can also apply to *other* events (e.g., a student leader running a club can still volunteer for a separate beach cleanup).
 
----
+## Tech Stack
 
-## 4. Functional Requirements
+* **Frontend:** Next.js 14+ (App Router)
+* **Styling:** Tailwind CSS + Shadcn/ui (for accessible components like Dialogs, Tabs, Dropdowns)
+* **Backend/DB:** Supabase (PostgreSQL)
+* **State Management:** React Query (for client-side data fetching) or Server Actions
+* **Authentication:** Custom developer-auth system (dev/testing only)
 
-### 4.1 Authentication & Onboarding
-* **Tech:** Supabase Auth + Next.js Middleware.
-* **Flow:** Email/Password or Social Login (Google/LinkedIn).
-* **Role Selection:** Users select intent during onboarding: "I want to find opportunities" (Applier) or "I want to organize initiatives" (Poster). *Posters may require admin approval or email domain verification.*
+## Functional Requirements
 
-### 4.2 The "Impact Profile" (User Dashboard)
+### Authentication & Onboarding
+
+* **Tech:** Custom developer-auth using a hardcoded secret string checked by an API route. Session stored via a signed, HttpOnly cookie.
+* **Flow:** Minimal developer-auth intended for local/intern testing only.
+* **Role Selection:** Users select intent during onboarding: "I want to find opportunities" (Applier) or "I want to organize initiatives" (Poster).
+
+### The "Impact Profile" (User Dashboard)
+
 * **Header:** Avatar, Name, Role Badge, Total Impact Hours.
 * **Portfolio Grid:** Masonry layout (Tailwind `columns-2 md:columns-3`) displaying cards of completed past projects.
 * **Verification Status:** Each portfolio item shows a "Verified" checkmark if confirmed by a Job Poster.
 
-### 4.3 The Opportunity Marketplace (Feed)
+### The Opportunity Marketplace (Feed)
+
 * **Tech:** Next.js Server Components (RSC) for fast data fetching.
 * **Listings:** Cards showing Title, Organization, Location, Type (Volunteer vs. Paid), and Tags.
 * **Filters:**
@@ -60,27 +63,52 @@ The system relies on a hierarchical permission model.
     * *Cause:* Environment, Education, Health.
     * *Location:* Remote vs. On-site (Geo-fencing).
 
-### 4.4 Job Management (Poster Only)
-* **Post a Job:** Form to input Title, Description, Requirements, Date/Time, Location, and Compensation.
-* **Applicant Tracking:** A table view of users who applied.
-    * *Actions:* Accept, Reject, Message.
+### Job Management (Poster Dashboard)
 
-### 4.5 Execution & Verification (The "Meat")
+* **Post a Job:** Form to input Title, Description, Requirements, Date/Time, Location, and Compensation.
+* **Dashboard Overview:** Poster dashboard showing a poster's jobs with server-side pagination and secure actions.
+* **Applicant Tracking:** Paginated table view of users who applied to each job.
+    * *Actions:* Accept, Reject, Verify.
+    * *Pagination:* Server-side pagination via `GET /api/poster/jobs/[id]/applicants?page=&limit=`
+* **Analytics Summary:** Server-side computed queries displaying:
+    * Applicant counts per job
+    * Verified hours sum
+    * Job statistics and metrics
+* **UI Components:**
+    * `PosterDashboard` (container) - Fetches poster jobs via `GET /api/poster/jobs?page=&limit=`
+    * `ApplicantTable` - Paginated table with accept, reject, verify actions wired to secure endpoints
+    * `AnalyticsSummary` - Executes server-side computed queries for counts and sums
+
+### Execution & Verification
+
 * **Check-in:** Mobile-responsive view for Appliers to scan a QR code generated by the Poster at the event.
 * **Completion:** Once the job is done, the Poster clicks "Verify" on the participant list.
 * **Record:** This action triggers a database update that locks the entry on the Applier's profile and increments their total hours.
 
----
+### Messaging & Notifications
 
-## 5. Technical Architecture
+* **Threads:** Lightweight threads/messages system allowing Posters to initiate conversations with applicants. Applicants can reply to messages.
+* **Thread Creation:** Posters can create threads tied to a job (Poster only).
+* **Message Exchange:** Participants can send messages within threads they belong to.
+* **Notifications:** In-app notifications for application status changes and verifications.
 
-### 5.1 Tech Stack
-* **Frontend:** Next.js 14+ (App Router).
-* **Styling:** Tailwind CSS + Shadcn/ui (for accessible components like Dialogs, Tabs, Dropdowns).
-* **Backend/DB:** Supabase (PostgreSQL).
-* **State Management:** React Query (for client-side data fetching) or Server Actions.
+### Role Upgrade (Applier to Poster)
 
-### 5.2 Database Schema (Simplified)
+* **Role Conversion:** Applier role users can upgrade their account to become a Poster, gaining access to all Poster functionality.
+* **Upgrade Process:** Users can request role upgrade through their profile settings or dashboard.
+* **Full Poster Access:** Once upgraded, users gain all Poster capabilities:
+    * Post new job opportunities
+    * Manage applications (accept, reject, verify)
+    * Generate QR codes for events
+    * Access poster dashboard and analytics
+    * Initiate conversations with applicants
+    * View analytics and impact metrics
+* **Dual Functionality:** Upgraded users maintain their ability to apply to other jobs (as a Poster is a superset of an Applier).
+* **Profile Update:** Role change updates the user's `profiles.role` field from `'applier'` to `'poster'` in the database.
+
+## Database Schema
+
+### Core Tables
 
 **Table: `profiles`**
 * `id` (PK, uuid)
@@ -88,60 +116,415 @@ The system relies on a hierarchical permission model.
 * `full_name` (text)
 * `avatar_url` (text)
 * `impact_hours` (int)
+* `onboarding_completed` (boolean)
 
 **Table: `jobs`**
 * `id` (PK, uuid)
 * `poster_id` (FK -> profiles.id)
 * `title` (text)
+* `description` (text)
 * `status` (enum: 'open', 'closed', 'completed')
+* `type` (enum: 'volunteer', 'paid')
+* `cause_tags` (array)
+* `location` (text)
+* `created_at` (timestamp)
 
 **Table: `applications`**
 * `id` (PK, uuid)
 * `job_id` (FK -> jobs.id)
 * `applicant_id` (FK -> profiles.id)
-* `status` (enum: 'pending', 'accepted', 'rejected', 'verified')
+* `status` (enum: 'pending', 'accepted', 'rejected', 'verified', 'withdrawn')
+* `verified_at` (timestamp)
+* `hours_awarded` (int)
 * `created_at` (timestamp)
 
-### 5.3 Security (Row Level Security - RLS)
+**Table: `attendances`**
+* `id` (PK, uuid)
+* `job_id` (FK -> jobs.id)
+* `applicant_id` (FK -> profiles.id)
+* `application_id` (FK -> applications.id)
+* `scanned_at` (timestamp)
+
+**Table: `threads`**
+* `id` (PK, uuid)
+* `job_id` (FK -> jobs.id, nullable)
+* `created_by` (FK -> profiles.id)
+* `created_at` (timestamp)
+
+**Table: `messages`**
+* `id` (PK, uuid)
+* `thread_id` (FK -> threads.id)
+* `sender_id` (FK -> profiles.id)
+* `body` (text)
+* `created_at` (timestamp)
+* `read_at` (timestamp)
+
+**Table: `notifications`**
+* `id` (PK, uuid)
+* `user_id` (FK -> profiles.id)
+* `type` (text)
+* `payload` (jsonb)
+* `read_at` (timestamp)
+* `created_at` (timestamp)
+
+## API Routes
+
+### Authentication
+
+* `POST /api/auth/login` - Developer login (body: `{ secret, displayName, role }`)
+  * Verifies `secret === process.env.DEV_AUTH_SECRET`
+  * Generates `userId` server-side
+  * Upserts `profiles` row
+  * Sets signed cookie `sid` containing `{ userId, iat }`
+* `POST /api/auth/logout` - Clears session cookie
+* `GET /api/auth/me` - Returns profile for current session
+
+### Jobs
+
+* `GET /api/jobs` - Public job feed with pagination and optional filters (`type`, `cause`, `location`)
+* `GET /api/jobs/[id]` - Public job detail
+* `POST /api/jobs` - Create job (Poster only, validates `session.userId` and `profile.role == 'poster'`)
+* `PATCH /api/jobs/[id]` - Update job (Owner only)
+* `DELETE /api/jobs/[id]` - Delete job (Owner only)
+
+### Applications
+
+* `POST /api/jobs/[id]/apply` - Create application (reads `session.userId` as `applicant_id`, prevents self-apply)
+* `DELETE /api/applications/[id]` - Withdraw application (soft-delete via `status='withdrawn'`)
+* `GET /api/my/applications` - List current user's applications
+* `PATCH /api/applications/[id]/accept` - Accept application (Poster only)
+* `PATCH /api/applications/[id]/reject` - Reject application (Poster only)
+* `PATCH /api/applications/[id]/verify` - Verify completion (Poster only, accepts `{ hours_awarded }`)
+
+### Poster Dashboard
+
+* `GET /api/poster/jobs` - Returns jobs with minimal applicant counts (paginated: `?page=&limit=`)
+* `GET /api/poster/jobs/[id]/applicants` - Paginated applicants for a job
+
+### QR Verification
+
+* `POST /api/jobs/[id]/qr/generate` - Generate QR code (Poster only)
+  * Generates signed token (HMAC or JWT) containing `{ jobId, exp }`
+  * Returns QR payload (URL pointing to `/qr/scan?token=...`)
+* `POST /api/qr/scan` - Scan QR code and record attendance
+  * Accepts `{ token }`
+  * Verifies signature and expiry
+  * Maps `session.userId` to applicant
+  * Inserts `attendances` row and/or updates `applications` to mark presence
+
+### Messaging
+
+* `POST /api/threads` - Create thread (Poster only for threads tied to a job)
+* `GET /api/threads` - List threads that include `session.userId`
+* `POST /api/threads/[id]/messages` - Insert message if `session.userId` is participant
+* `GET /api/threads/[id]/messages` - Paginated messages for a thread
+
+### Notifications
+
+* `GET /api/notifications` - Get user notifications
+
+## Security
+
+### Row Level Security (RLS)
+
 * **Jobs Table:**
-    * `SELECT`: Public.
-    * `INSERT/UPDATE/DELETE`: Only users where `auth.uid() == poster_id` AND `profile.role == 'poster'`.
+    * `SELECT`: Public
+    * `INSERT/UPDATE/DELETE`: Only users where `auth.uid() == poster_id` AND `profile.role == 'poster'`
 * **Applications Table:**
-    * `INSERT`: Authenticated users (Appliers & Posters).
-    * `UPDATE`: Only `poster_id` of the parent Job (to accept/verify) OR `applicant_id` (to withdraw).
+    * `INSERT`: Authenticated users (Appliers & Posters)
+    * `UPDATE`: Only `poster_id` of the parent Job (to accept/verify) OR `applicant_id` (to withdraw)
 * **Self-Application Constraint:**
-    * Check constraint or RLS to ensure `applicant_id != poster_id` (User cannot apply to their own job).
+    * Database trigger `prevent_self_apply()` ensures `applicant_id != poster_id` (User cannot apply to their own job)
 
----
+### Middleware
 
-## 6. User Experience (UX) Flow
+* `middleware.ts` verifies `sid` cookie signature using `process.env.COOKIE_SIGNING_SECRET`
+* Blocks protected API routes (returns 401) when invalid
+* Cookie-based session verification
+
+### Defense-in-Depth
+
+* Server-side authorization checks in addition to database constraints
+* Role-based access control enforced at multiple layers
+
+## Getting Started
+
+### Prerequisites
+
+* Node.js 18+ installed
+* PostgreSQL database (via Supabase)
+* Environment variables configured
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd cursor-hackathon-repo
+```
+
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
+
+3. Set up environment variables:
+Create a `.env.local` file with the following:
+```env
+DEV_AUTH_SECRET=your-dev-auth-secret
+COOKIE_SIGNING_SECRET=your-cookie-signing-secret
+DEV_SESSION_TTL=604800
+DATABASE_URL=your-postgres-connection-string
+QR_SIGNING_SECRET=your-qr-signing-secret
+```
+
+4. Run database migrations:
+Execute SQL scripts in order:
+* `supabase/sql/impl-01-auth.sql` - Creates `profiles` table and role enum
+* `supabase/sql/impl-02-jobs.sql` - Creates `jobs` table, enums, indexes (GIN on `cause_tags`)
+* `supabase/sql/impl-03-applications.sql` - Creates `applications` table and `prevent_self_apply()` trigger
+* `supabase/sql/impl-04-verification.sql` - Alters `applications` to add `verified_at` and `hours_awarded`
+* `supabase/sql/impl-05-analytics.sql` - Optional view: `poster_job_stats(poster_id)` with `job_id, applicant_count, verified_hours_sum`
+* `supabase/sql/impl-06-qr.sql` - Creates `attendances` table
+* `supabase/sql/impl-07-messaging.sql` - Creates `threads`, `messages`, and `notifications` tables
+
+5. Start the development server:
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
+
+6. Open `http://localhost:3000` in your browser.
+
+## Architecture & Design Principles
+
+### SOLID Principles
+
+* **Single Responsibility:** Auth responsibilities separated: `lib/auth` (sign/verify), `api/auth` (routes), `db/profiles` (DB access)
+* **Controller/Service/Repository Separation:** API route handlers call services (business logic) which call DB repository layer
+* **Component Design:** Keep components small and single-purpose (e.g., `JobCard`, `JobForm`, `JobsFeed`)
+
+### DRY (Don't Repeat Yourself)
+
+* Reuse DB access functions: `getOrCreateProfile(userId, props)` used by login and onboarding
+* Reuse validation: `validateJobPayload` function used in both server-side and client-side form validation
+* Reuse authorization helpers: `authorize` helper checks thread participation
+
+### Architecture Layers
+
+* **Presentation Layer:** UI components (React components)
+* **Data Fetching Layer:** Custom hooks (e.g., `usePosterJobs()`) wrap fetching/pagination logic
+* **Controller Layer:** API route handlers (thin, delegate to services)
+* **Service Layer:** Business logic (e.g., `applicationsService`, `verificationService`, `qrService`, `messagingService`)
+* **Repository Layer:** DB access functions
+
+## Implementation Details
+
+### Impl 01: Auth & Onboarding
+
+* Minimal developer-auth using hardcoded secret string
+* Session stored via signed, HttpOnly cookie
+* Onboarding creates `profiles` row and sets completed flag
+* Middleware verifies `sid` cookie signature
+* Helpers in `lib/auth.ts` for signing, cookie, and session management
+
+**Environment Variables:**
+* `DEV_AUTH_SECRET` - Developer login secret (required for login in dev)
+* `COOKIE_SIGNING_SECRET` - HMAC secret used to sign session cookies
+* `DEV_SESSION_TTL` - Session lifetime (seconds), default 604800
+* `DATABASE_URL` - Postgres connection string
+
+### Impl 02: Jobs Schema & Posting
+
+* Creates `jobs` schema with enums, indexes (GIN on `cause_tags`)
+* Poster-only create/edit/delete API
+* Public feed and job detail pages
+* Controller/service/repository separation
+* Validation reuse with `validateJobPayload`
+
+**SQL Notes:**
+* GIN index on `cause_tags` for tag filtering
+* Index on `poster_id` and `status` for fast poster queries
+
+### Impl 03: Applications & Self-Apply Guard
+
+* `applications` table with lifecycle statuses
+* Apply/withdraw flows
+* Database trigger `prevent_self_apply()` prevents self-application
+* Server-side guard as defense-in-depth
+* Service layer: `applicationsService.applyForJob()` and `applicationsService.withdrawApplication()`
+
+**Business Rules:**
+* Self-apply is forbidden
+* Applicants can withdraw only their own applications
+* Posters can `accept`, `reject`, and later `verify` applications for their jobs
+
+### Impl 04: Manual Verification & Impact
+
+* Poster-led verification marks accepted application as `verified`
+* Awards hours and atomically increments applicant's `profiles.impact_hours`
+* Verified applications become immutable
+* Single DB transaction ensures atomicity (BEGIN/COMMIT)
+* Service: `verificationService.verifyApplication(applicationId, posterId, hours)`
+
+**Verification Flow:**
+1. Check `session.userId` is the job's `poster_id`
+2. Check application `status === 'accepted'` (only accepted apps may be verified)
+3. Run DB transaction to update `applications` and `profiles`
+
+### Impl 05: Poster Dashboard & Tracking
+
+* Poster dashboard showing poster's jobs
+* Applicant tracking table with accept/reject/verify actions
+* Analytics (applicant counts, verified hours)
+* Server-side pagination
+* Components: `PosterDashboard`, `ApplicantTable`, `AnalyticsSummary`
+* Service: `posterService.getJobsWithStats(posterId, page, limit)`
+
+**SQL:**
+* Optional view: `poster_job_stats(poster_id)` with `job_id, applicant_count, verified_hours_sum`
+
+### Impl 06: QR Verification System
+
+* Per-job QR generation and scan handling
+* QR tokens are server-signed, time-limited, and map to a job
+* Scanning marks attendance for authenticated applier
+* Token format: JWT (HS256) signed with `process.env.QR_SIGNING_SECRET` or compact HMAC payload
+* Services: `qrService.generateToken(jobId)`, `qrService.scan(token, userId)`
+
+**Security:**
+* Token expiry should be short (e.g., 15–60 minutes)
+* If tokens are single-use, store used `jti` and reject reuse
+
+**Environment Variables:**
+* `QR_SIGNING_SECRET` - Secret used to sign QR tokens
+
+### Impl 07: Messaging & Notifications
+
+* Threads/messages system allowing Posters to initiate conversations
+* Applicants can reply
+* In-app notifications for application status changes and verifications
+* Database: `threads`, `messages`, `notifications` tables
+* Service: `messagingService` contains message validation and participant checks
+
+**Notification Delivery:**
+* In-app notifications (push optional later)
+* `notifications` table: `id, user_id, type, payload, read_at, created_at`
+
+## User Experience (UX) Flow
 
 ### Scenario A: The Student (Applier)
-1.  **Land:** Home page -> Login.
-2.  **Browse:** Filters feed for "Weekend Beach Cleanup."
-3.  **Action:** Clicks "Apply."
-4.  **Work:** Attends event -> Shows QR code/Profile ID to organizer.
-5.  **Result:** Receives notification: "Hours Verified." Profile updates automatically.
+
+1. **Land:** Home page -> Login
+2. **Browse:** Filters feed for "Weekend Beach Cleanup"
+3. **Action:** Clicks "Apply"
+4. **Work:** Attends event -> Shows QR code/Profile ID to organizer
+5. **Result:** Receives notification: "Hours Verified." Profile updates automatically
 
 ### Scenario B: The CSR Lead (Poster)
-1.  **Dashboard:** Clicks "Post Opportunity."
-2.  **Form:** Fills out details for "Graphic Design for Charity."
-3.  **Wait:** Receives 5 applications.
-4.  **Select:** Views profiles, accepts 1 candidate.
-5.  **Finish:** Marks project as "Completed."
 
----
+1. **Dashboard:** Clicks "Post Opportunity"
+2. **Form:** Fills out details for "Graphic Design for Charity"
+3. **Wait:** Receives 5 applications
+4. **Select:** Views profiles, accepts 1 candidate
+5. **Finish:** Marks project as "Completed" and verifies with hours awarded
 
-## 7. Roadmap & Phasing
+## Roadmap & Phasing
 
-* **Phase 1 (MVP):**
-    * Auth & Role Setup.
-    * Basic Profile Creation.
-    * Job Posting & Applying (CRUD).
-    * Manual Verification (Poster clicks a button).
-* **Phase 2 (Trust):**
-    * QR Code Verification system.
-    * Messaging system between Poster and Applicant.
-* **Phase 3 (Scale):**
-    * Payment integration (Stripe) for paid gigs.
-    * "Squads" (Group applications).
+### Phase 1 (MVP)
+
+* Auth & Role Setup (Impl 01)
+* Basic Profile Creation (Impl 01)
+* Job Posting & Applying (Impl 02, 03)
+* Manual Verification (Impl 04)
+
+### Phase 2 (Trust)
+
+* QR Code Verification System (Impl 06)
+* Messaging System (Impl 07)
+* Poster Dashboard & Analytics (Impl 05)
+
+### Phase 3 (Scale)
+
+* Payment integration (Stripe) for paid gigs
+* "Squads" (Group applications)
+
+## Testing
+
+Each implementation includes:
+
+### Unit Tests
+
+* Service layer functions (e.g., `lib/auth.sign`, `lib/auth.verify`, `applicationsService.applyForJob`)
+* Validation functions (e.g., `validateJobPayload`)
+* Repository functions (e.g., `db.upsertProfile`)
+
+### Manual E2E Tests
+
+* Authentication flow: Login, session verification, protected route access
+* Job creation: Poster creates job, non-poster cannot
+* Application flow: Apply, withdraw, accept, reject, verify
+* QR verification: Generate QR, scan QR, record attendance
+* Messaging: Create thread, send messages, participant checks
+* Notifications: Status change notifications appear
+
+### Acceptance Checklists
+
+Each implementation document includes an acceptance checklist for verification.
+
+## Development Notes
+
+### Environment Variables Summary
+
+* `DEV_AUTH_SECRET` - Developer login secret (required for login in dev)
+* `COOKIE_SIGNING_SECRET` - HMAC secret used to sign session cookies
+* `DEV_SESSION_TTL` - Session lifetime (seconds), default 604800
+* `DATABASE_URL` - Postgres connection string for server
+* `QR_SIGNING_SECRET` - Secret used to sign QR tokens
+
+### Code Organization
+
+* `lib/auth.ts` - Auth helpers (sign, verify, cookie, session)
+* `api/auth/` - Authentication API routes
+* `api/jobs/` - Job management API routes
+* `api/applications/` - Application API routes
+* `api/poster/` - Poster dashboard API routes
+* `api/qr/` - QR verification API routes
+* `api/threads/` - Messaging API routes
+* `api/notifications/` - Notifications API routes
+* `db/` - Database repository functions
+* `services/` - Business logic services
+* `components/` - React UI components
+
+### Key Implementation Files
+
+* `middleware.ts` - Cookie verification and route protection
+* `supabase/sql/impl-01-auth.sql` - Profiles table and role enum
+* `supabase/sql/impl-02-jobs.sql` - Jobs table and indexes
+* `supabase/sql/impl-03-applications.sql` - Applications table and self-apply trigger
+* `supabase/sql/impl-04-verification.sql` - Verification fields
+* `supabase/sql/impl-05-analytics.sql` - Analytics view (optional)
+* `supabase/sql/impl-06-qr.sql` - Attendances table
+* `supabase/sql/impl-07-messaging.sql` - Threads, messages, notifications tables
+
+## Documentation
+
+Detailed implementation documentation is available in the `.github` folder:
+
+* `.github/main-prd.md` - Product Requirements Document
+* `.github/impl-01-auth-and-onboarding.md` - Auth & Onboarding Implementation
+* `.github/impl-02-jobs-schema-posting.md` - Jobs Schema & Posting Implementation
+* `.github/impl-03-applications-and-rls.md` - Applications & RLS Implementation
+* `.github/impl-04-manual-verification.md` - Manual Verification Implementation
+* `.github/impl-05-poster-dashboard.md` - Poster Dashboard Implementation
+* `.github/impl-06-qr-verification.md` - QR Verification Implementation
+* `.github/impl-07-messaging.md` - Messaging & Notifications Implementation
