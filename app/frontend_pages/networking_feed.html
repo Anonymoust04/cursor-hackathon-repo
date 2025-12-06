@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ImpactHub - Networking Feed</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style type="text/tailwindcss">
+    :root {
+      --background-light: #F8F9FF;
+      --card-light: #FFFFFF;
+      --border-light: #E0E7FF;
+      --text-primary-light: #1E1B4B;
+      --text-secondary-light: #6B7280;
+      --background-dark: #0D1117;
+      --card-dark: #161B22;
+      --border-dark: #30363D;
+      --text-primary-dark: #E6EDF3;
+      --text-secondary-dark: #8B949E;
+      --primary-color: #0077B5;
+      --primary-color-hover: #005E90;
+      --secondary-color: #F7BF38;
+    }
+  </style>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": {
+              DEFAULT: "var(--primary-color)",
+              "hover": "var(--primary-color-hover)",
+              "50": "#E0F2FE",
+              "100": "#BAE6FD",
+              "200": "#7DD3FC",
+              "300": "#38BDF8",
+              "400": "#0EA5E9",
+              "500": "#0284C7",
+              "600": "#0369A1",
+              "700": "#075985",
+              "800": "#0C4A6E",
+              "900": "#082F49",
+              "950": "#041826"
+            },
+            "secondary": "var(--secondary-color)",
+            "background-light": "var(--background-light)",
+            "background-dark": "var(--background-dark)",
+            "card-light": "var(--card-light)",
+            "card-dark": "var(--card-dark)",
+            "text-primary-light": "var(--text-primary-light)",
+            "text-primary-dark": "var(--text-primary-dark)",
+            "text-secondary-light": "var(--text-secondary-light)",
+            "text-secondary-dark": "var(--text-secondary-dark)",
+            "border-light": "var(--border-light)",
+            "border-dark": "var(--border-dark)"
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.5rem",
+            "lg": "0.75rem",
+            "xl": "1rem",
+            "full": "9999px",
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-primary-light dark:text-text-primary-dark">
+<header class="sticky top-0 z-50 flex h-16 items-center justify-center border-b border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark/80 backdrop-blur-sm">
+<div class="container mx-auto flex w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-2 text-text-primary-light dark:text-text-primary-dark">
+<div class="h-8 w-8 text-[#0077B5]">
+<svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M10.6.4c.5-.5 1.4-.5 1.9 0l1.7 1.7c.2.2.5.3.8.3.4 0 .8-.2 1.1-.5l1.6-1.1c.6-.4 1.4-.2 1.8.4l.8 1.2c.2.4.6.6 1 .6.5 0 .9-.3 1.2-.7l.9-1.2c.4-.6 1.2-.7 1.8-.3l1.1 1.6c.3.4.7.6 1.1.5.4 0 .8-.2 1.1-.5l1.7-1.7c.5-.5 1.4-.5 1.9 0l.4.4c.5.5.5 1.4 0 1.9l-1.7 1.7c-.2.2-.3.5-.3.8 0 .4.2.8.5 1.1l1.1 1.6c.4.6.2 1.4-.4 1.8l-1.2.8c-.4.2-.6.6-.6 1 0 .5.3.9.7 1.2l1.2.9c.6.4.7 1.2.3 1.8l-1.6 1.1c-.4.3-.6.7-.5 1.1 0 .4.2.8.5 1.1l1.7 1.7c.5.5.5 1.4 0 1.9l-.4.4c-.5.5-1.4.5-1.9 0l-1.7-1.7c-.2-.2-.5-.3-.8-.3-.4 0-.8.2-1.1.5l-1.6 1.1c-.6.4-1.4.2-1.8-.4l-.8-1.2c-.2-.4-.6-.6-1-.6-.5 0-.9.3-1.2.7l-.9 1.2c-.4.6-1.2.7-1.8.3l-1.1-1.6c-.3-.4-.7-.6-1.1-.5-.4 0-.8.2-1.1.5l-1.7 1.7c-.5.5-1.4.5-1.9 0l-8.2-8.2c-.5-.5-.5-1.4 0-1.9L10.6.4zM13 10.3l-5 5.7h4l-1 5 5-5.7H12l1-5z M5.4 12c0-1.2.5-2.4 1.3-3.2L2.2 4.3C.8 5.7.1 7.6.1 9.5c0 1.9.7 3.8 2.1 5.2l4.5-4.5c-.8-.9-1.3-2-1.3-3.2zm13.2-7.7L14.1 8.8c.9.8 1.4 2 1.4 3.2 0 1.2-.5 2.4-1.3 3.2l4.5 4.5c1.4-1.4 2.1-3.3 2.1-5.2 0-1.9-.7-3.8-2.1-5.2z"></path>
+</svg>
+</div>
+<span class="text-xl font-bold tracking-tight text-[#0077B5]">ImpactHub</span>
+</div>
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary-light dark:text-text-secondary-dark">search</span>
+<input class="form-input h-10 w-full min-w-[280px] rounded-full border-border-light bg-background-light dark:border-border-dark dark:bg-card-dark py-2 pl-10 pr-4 text-sm font-normal placeholder:text-text-secondary-light dark:placeholder:text-text-secondary-dark focus:border-primary-600 focus:ring-1 focus:ring-primary-600" placeholder="Search..." type="search"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<nav class="hidden items-center gap-6 lg:flex">
+<a class="text-sm font-medium text-primary-600 dark:text-primary-400" href="#">Home</a>
+<a class="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark hover:text-primary-600 dark:hover:text-primary-400" href="#">Gigs</a>
+<a class="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark hover:text-primary-600 dark:hover:text-primary-400" href="#">Projects</a>
+<a class="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark hover:text-primary-600 dark:hover:text-primary-400" href="#">Messages</a>
+<a class="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark hover:text-primary-600 dark:hover:text-primary-400" href="#">Notifications</a>
+</nav>
+<div class="h-8 w-px bg-border-light dark:bg-border-dark hidden lg:block"></div>
+<button class="rounded-lg bg-primary text-white px-4 py-2 text-sm font-semibold shadow-sm hover:bg-primary-hover transition-colors">Create Post</button>
+<div class="flex items-center gap-2">
+<div class="aspect-square size-10 rounded-full bg-cover bg-center bg-no-repeat" data-alt="User profile picture of Alex Chen" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCOHS09b1DeTMN6ZkMF6Hzeo_HpDiGAO4a_JS25l__Js9CXYJAuN5oXzOeE5OTH_dDPb0raf5NEEK8Jbycu_xxJSP9YFTMiVsQA8sLOVRgpUCOzQVdeHq43zh2MJ2HJVTeMIL5JsTgxf6knRgTSTK_O46oclYpxve5z8GP-y3Wn6A_8jqTMoOWQ52WhDdfw6rHK2MGLy_K_g9-mp1nlZNojti3xL2DJjkaX6zOHnDub6_jYoQH41o2wah9wjcUgwMu4ccpcks0T6Gs");'></div>
+<div class="hidden items-center md:flex">
+<span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark">arrow_drop_down</span>
+</div>
+</div>
+</div>
+</div>
+</header>
+<main class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+<div class="grid grid-cols-12 gap-8">
+<aside class="sticky top-24 col-span-12 h-fit space-y-6 md:col-span-3">
+<div class="overflow-hidden rounded-xl border border-border-light bg-card-light dark:border-border-dark dark:bg-card-dark text-center shadow-sm">
+<div class="h-20 bg-gradient-to-r from-primary-400 to-secondary"></div>
+<div class="relative p-4">
+<div class="absolute -top-10 left-1/2 -translate-x-1/2">
+<div class="aspect-square w-20 rounded-full bg-cover bg-center bg-no-repeat ring-4 ring-card-light dark:ring-card-dark" data-alt="User profile picture of Alex Chen" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAtOH5GUGui-Z54EEKZ8NJCfNQGmUrGTdlW_zgVKKCBX8HN99-fhUcgG_jI-wNcnu7JANGgBklZIAaWG3oCIeF95DJk1cGgoMLXXMwVGGq9TtnvuajZgHaMw9rgaviW52nDgBPDciEyATz6jkc2EZKTLvjM-F87fUA1sJvnehbCJqOV6Kt9-Fq2nblzVOR88tPGKAhSFHe5UfRcaynZLTsnfXFUrUCi_7ukbxyGC3UTQsO24RHWR6SvlPf-jC98gt73x6uB-a2AxPI");'></div>
+</div>
+<div class="mt-10 flex flex-col items-center justify-center">
+<p class="text-lg font-bold">Alex Chen</p>
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">Social Impact Advocate | Student</p>
+</div>
+</div>
+<div class="border-t border-border-light dark:border-border-dark p-4">
+<div class="flex justify-around">
+<div class="text-center">
+<p class="text-lg font-bold">150</p>
+<p class="text-xs text-text-secondary-light dark:text-text-secondary-dark">Connections</p>
+</div>
+<div class="text-center">
+<p class="text-lg font-bold">12</p>
+<p class="text-xs text-text-secondary-light dark:text-text-secondary-dark">Projects</p>
+</div>
+</div>
+</div>
+</div>
+<div class="rounded-xl border border-border-light bg-card-light dark:border-border-dark dark:bg-card-dark p-4 space-y-1 shadow-sm">
+<a class="flex items-center gap-3 rounded-lg p-2 hover:bg-background-light dark:hover:bg-background-dark text-primary-600 bg-primary-50 dark:bg-primary-900/20" href="#">
+<span class="material-symbols-outlined">home</span>
+<p class="text-sm font-semibold">Home</p>
+</a>
+<a class="flex items-center gap-3 rounded-lg p-2 hover:bg-background-light dark:hover:bg-background-dark" href="#">
+<span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark">work</span>
+<p class="text-sm font-medium">My Gigs</p>
+</a>
+<a class="flex items-center gap-3 rounded-lg p-2 hover:bg-background-light dark:hover:bg-background-dark" href="#">
+<span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark">lightbulb</span>
+<p class="text-sm font-medium">My Projects</p>
+</a>
+<a class="flex items-center gap-3 rounded-lg p-2 hover:bg-background-light dark:hover:bg-background-dark" href="#">
+<span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark">bookmark</span>
+<p class="text-sm font-medium">Saved Posts</p>
+</a>
+</div>
+</aside>
+<div class="col-span-12 space-y-6 md:col-span-6">
+<div class="rounded-xl border border-border-light bg-card-light dark:border-border-dark dark:bg-card-dark p-4 shadow-sm">
+<div class="flex items-start gap-4">
+<div class="aspect-square size-12 flex-shrink-0 rounded-full bg-cover bg-center bg-no-repeat" data-alt="User profile picture of Alex Chen" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDKRUAf6BnaOiKjmSghfPsBPkWc98dPnAKVV-L2P-2Peg5yN3FixS77bu6Xrpl05r1nAxqrGrb7PY69bUYRQXFZhU1aT1HYyr78uUD76CpMnAXI4x-KuxNqR35ppL4ZhB7-T8eTYHSn_MIZoy5rw1vT6vXeQMN5r-LQkBpqcoGV_p2DpMRyUO3wtb3RRRbIkSLfnnKdFVGgtGVh3f46UYUzH-jbSipdQaZdZuFmHd1MdWGPUfTOCO87JXh4TRlUgdibHf8xFmINDps");'></div>
+<div class="w-full">
+<textarea class="form-textarea w-full rounded-lg border-border-light bg-background-light dark:border-border-dark dark:bg-card-dark focus:border-primary-600 focus:ring-1 focus:ring-primary-600" placeholder="What's on your mind, Alex?" rows="2"></textarea>
+</div>
+</div>
+<div class="mt-3 flex justify-between items-center">
+<div class="flex items-center gap-2">
+<button class="flex items-center gap-2 rounded-lg p-2 text-sm text-text-secondary-light dark:text-text-secondary-dark hover:bg-gray-100 dark:hover:bg-gray-700">
+<span class="material-symbols-outlined text-lg">image</span> Photo
+              </button>
+<button class="flex items-center gap-2 rounded-lg p-2 text-sm text-text-secondary-light dark:text-text-secondary-dark hover:bg-gray-100 dark:hover:bg-gray-700">
+<span class="material-symbols-outlined text-lg">videocam</span> Video
+              </button>
+<button class="flex items-center gap-2 rounded-lg p-2 text-sm text-text-secondary-light dark:text-text-secondary-dark hover:bg-gray-100 dark:hover:bg-gray-700">
+<span class="material-symbols-outlined text-lg">add_box</span> Project
+              </button>
+</div>
+<button class="rounded-lg bg-primary text-white px-4 py-2 text-sm font-semibold shadow-sm hover:bg-primary-hover transition-colors">Post</button>
+</div>
+</div>
+<div class="space-y-6">
+<div class="rounded-xl border border-border-light bg-card-light dark:border-border-dark dark:bg-card-dark shadow-sm">
+<div class="p-4">
+<div class="flex items-center gap-3">
+<div class="aspect-square size-10 rounded-full bg-cover bg-center bg-no-repeat" data-alt="Community Builders logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAk6fGZReJZxCI0SrEICYSnazeICxViySlNuIV0POCwzELcHyY-soJU_SNBkTv56yC-DIBcHzMx6I23L9KDLzemu8-Pr9QyWNopWZTsF5fyz1PJ5rW58GCUDTg9X_EVZTLWrNEjso_-55ClvbboyEWIuejEdroAU3MyLKcDXdLyPzMSJTo-MFfkrnKUxc1JF4kcTLlZC5LTucwzHWjgTeQ459qFipMKhFRjfMeMC5CQhO8yJniMAz8ZdvzLZWLZNj9WLbMspQ2Sy9o");'></div>
+<div>
+<p class="font-semibold text-sm">Community Builders</p>
+<p class="text-xs text-text-secondary-light dark:text-text-secondary-dark">2 hours ago</p>
+</div>
+<div class="ml-auto">
+<span class="material-symbols-outlined text-text-secondary-light">more_horiz</span>
+</div>
+</div>
+<p class="mt-3 text-sm text-text-primary-light dark:text-text-primary-dark">We're looking for volunteers to help build a new community garden in downtown Springfield! This project aims to provide fresh produce for local families and create a beautiful green space for everyone. No experience needed, just a positive attitude! 🌱</p>
+</div>
+<div class="aspect-video w-full bg-cover bg-center" data-alt="Volunteers working in a community garden" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA2DGUirA62lGHQxABDIkY0mg855JQNE4SBK-4X5_8Y1zxBkWgRg4XMHwDUwHHVCrzv2rMtRJE_kMjyE7SJEIatAyoGuWtLlap1iVcojEOW19przw5j6V45fX4byYvjsuNMBBXo7FWYiZ5dEPcDacPa1Mh9-vUrQQaXD-qrpO_fjn-CsiMJknZ0FTmaTr1_dZGS-2na4t3UoksKz1PEyjam9zYfpCkejTj99qvpKjnyLgStJAh8kn1gSUh7WhvfWzN50s_4dKaNfx4");'></div>
+<div class="flex items-center justify-between p-2 border-t border-border-light dark:border-border-dark">
+<div class="flex items-center gap-1">
+<button class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-text-secondary-light dark:text-text-secondary-dark hover:bg-background-light dark:hover:bg-background-dark">
+<span class="material-symbols-outlined text-lg">thumb_up</span> Like
+                </button>
+<button class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-text-secondary-light dark:text-text-secondary-dark hover:bg-background-light dark:hover:bg-background-dark">
+<span class="material-symbols-outlined text-lg">comment</span> Comment
+                </button>
+<button class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-text-secondary-light dark:text-text-secondary-dark hover:bg-background-light dark:hover:bg-background-dark">
+<span class="material-symbols-outlined text-lg">share</span> Share
+                </button>
+</div>
+<button class="rounded-lg bg-primary text-white px-4 py-2 text-sm font-semibold shadow-sm hover:bg-primary-hover transition-colors">View Details</button>
+</div>
+</div>
+<div class="rounded-xl border border-border-light bg-card-light dark:border-border-dark dark:bg-card-dark p-4 shadow-sm">
+<div class="flex items-center gap-3">
+<div class="aspect-square size-10 rounded-full bg-cover bg-center bg-no-repeat" data-alt="Profile picture of Sarah Minh" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCt36LPL4W7FBUY-spkOL7MbIvU3_dX88Eb-jr5aFBNZwFkgWFU-6JXgVfCDhQX2DAyyijQZaL6tGA-mw84utHQXT6QGqsN4VN1yQEzNc8pI42OzhsBrDj0zBhUe4lGyZOSUvvOGfJ6xDexGVWraeiCaYueh1DBrPewdaUJykod2PVmDMxG596z_HepI6tnw7ErNIcnXyd3dco-x00E8R9EXIkXU_MYxhfX2jfKSHFj-KdcMVJRyi98J5IC2k9V1KB7pPfPp4cXi08");'></div>
+<div>
+<p class="font-semibold text-sm">Sarah Minh</p>
+<p class="text-xs text-text-secondary-light dark:text-text-secondary-dark">1 day ago</p>
+</div>
+<div class="ml-auto">
+<span class="material-symbols-outlined text-text-secondary-light">more_horiz</span>
+</div>
+</div>
+<p class="mt-3 text-sm text-text-primary-light dark:text-text-primary-dark">Feeling incredibly inspired after attending the Global Impact Summit this weekend. The discussions around circular economies were particularly eye-opening. It's clear that collaborative corporate and community action is the key to a sustainable future. Happy to connect with anyone who was there!</p>
+<div class="flex items-center gap-1 mt-4 border-t border-border-light dark:border-border-dark pt-2">
+<button class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-text-secondary-light dark:text-text-secondary-dark hover:bg-background-light dark:hover:bg-background-dark">
+<span class="material-symbols-outlined text-lg">thumb_up</span> Like
+              </button>
+<button class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-text-secondary-light dark:text-text-secondary-dark hover:bg-background-light dark:hover:bg-background-dark">
+<span class="material-symbols-outlined text-lg">comment</span> Comment
+              </button>
+<button class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-text-secondary-light dark:text-text-secondary-dark hover:bg-background-light dark:hover:bg-background-dark">
+<span class="material-symbols-outlined text-lg">share</span> Share
+              </button>
+</div>
+</div>
+<div class="rounded-xl border border-border-light bg-card-light dark:border-border-dark dark:bg-card-dark p-4 shadow-sm">
+<div class="flex items-center gap-3">
+<div class="aspect-square size-10 rounded-lg bg-cover bg-center bg-no-repeat" data-alt="GreenTech Innovations logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBgwk4S4pld3ZkCn_Miozx1oBuZnrB1GYo4cUKS9bHQiKLOuas5N9hUPKetcpfEQYhvAo4unKIQN7kT7ZrA6RrhqLSYyNYKW49JlZcGAR7F5nf2y8Es1iiWHUpxxZNM5F5HKE5pVi8sSyhVTyHkpTXBklLodV-xkAXa70hj9vUGRrQoSS8Cdh0SWoQgNWa54fCdrOaIZZ12zyhzBPLwg4CKLVcpcXeIuIZdwtwlIVTNEf_TUyavyA_f4fB-Z-R1w-fL3Lh94HqVwsc");'></div>
+<div>
+<p class="font-semibold text-sm">GreenTech Innovations</p>
+<p class="text-xs text-text-secondary-light dark:text-text-secondary-dark">3 days ago</p>
+</div>
+<div class="ml-auto">
+<span class="material-symbols-outlined text-text-secondary-light">more_horiz</span>
+</div>
+</div>
+<p class="mt-3 text-sm text-text-primary-light dark:text-text-primary-dark">We are thrilled to announce our new "Tech for Trees" initiative! For every new software license sold, we will plant 10 trees in partnership with the Rainforest Alliance. This is part of our commitment to be carbon neutral by 2030. Learn more on our blog.</p>
+<div class="flex items-center gap-1 mt-4 border-t border-border-light dark:border-border-dark pt-2">
+<button class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-text-secondary-light dark:text-text-secondary-dark hover:bg-background-light dark:hover:bg-background-dark">
+<span class="material-symbols-outlined text-lg">thumb_up</span> Like
+              </button>
+<button class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-text-secondary-light dark:text-text-secondary-dark hover:bg-background-light dark:hover:bg-background-dark">
+<span class="material-symbols-outlined text-lg">comment</span> Comment
+              </button>
+<button class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-text-secondary-light dark:text-text-secondary-dark hover:bg-background-light dark:hover:bg-background-dark">
+<span class="material-symbols-outlined text-lg">share</span> Share
+              </button>
+</div>
+</div>
+</div>
+</div>
+<aside class="sticky top-24 col-span-12 h-fit space-y-6 md:col-span-3">
+<div class="rounded-xl border border-border-light bg-card-light dark:border-border-dark dark:bg-card-dark p-4 shadow-sm">
+<h3 class="font-semibold text-sm mb-4">Suggestions</h3>
+<div class="space-y-4">
+<div class="flex items-start gap-3">
+<div class="flex-shrink-0">
+<div class="aspect-square size-10 rounded-full bg-cover bg-center bg-no-repeat" data-alt="Clean Oceans Org logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBVfLmdkhuk4RAQwM2aKsBNNYF_Pxoq_piuZc-iQ4gWUajVv7QaDyMvFt6xU3klAUd2WGIKcSVQSrAOeQ7INxm4NW8XuIpUXtCUemPfM_9RgN1Osv0cDwNOQlctGZNFiO4VpjGac1IZ0q_0ecEPlh0f6GzDfowmoUg2JxzAfLWPgZomSw_FdF3dVmuJsWLXeqOTybvILk-kO8zd94B86BJOYp9HiJOEN4lmnF0-qQN-7nUELuAPg5iCcwXKUJBeqHZKTpzPpGrA3Ic");'></div>
+</div>
+<div class="flex-1">
+<p class="font-semibold text-sm">Social Media Manager</p>
+<p class="text-xs text-text-secondary-light dark:text-text-secondary-dark">Clean Oceans Org</p>
+<button class="mt-2 rounded-full border border-primary text-primary px-4 py-1 text-xs font-semibold shadow-sm hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">Apply</button>
+</div>
+<button>
+<span class="material-symbols-outlined text-text-secondary-light text-xl">close</span>
+</button>
+</div>
+<div class="flex items-start gap-3">
+<div class="flex-shrink-0">
+<div class="aspect-square size-10 rounded-full bg-cover bg-center bg-no-repeat" data-alt="Literacy First logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDJ1o7hCQorvGhPQEkPy6w2xw2WyFzrW0DYVw6jrTkqYDQtOKKFZL_5_wDWti6z9OarkmVkRVyKYUtzSQ9MOikoyZXg9nhMAvMxxT9jC0ZMg-vqUGqdiaKQD_OlnveSjpuHZCddo7nMv6wFogs6RpxHJFlXvSJPDLszZnQuDVX-WrLyVefL3ZwrLDIOACTZKiy9bDET4s6WaP-UHFv-QQV-12KMYVcRJmwuRsUnlEC90__vX3KZoBq8BWFs53Ua0-mirFBHntm_CXw");'></div>
+</div>
+<div class="flex-1">
+<p class="font-semibold text-sm">Web Dev Volunteer</p>
+<p class="text-xs text-text-secondary-light dark:text-text-secondary-dark">Literacy First</p>
+<button class="mt-2 rounded-full border border-primary text-primary px-4 py-1 text-xs font-semibold shadow-sm hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">Apply</button>
+</div>
+<button>
+<span class="material-symbols-outlined text-text-secondary-light text-xl">close</span>
+</button>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Event Check-in &amp; Verification</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    .material-icons-outlined {
+      font-size: inherit;
+    }
+  </style>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#2563eb", // Updated to blue
+            "background-light": "#f8fafc", // Updated to a lighter gray/blue-white
+            "background-dark": "#020617", // Updated to a dark blue
+          },
+          fontFamily: {
+            "display": ["Inter"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.5rem", // Default border radius changed
+            "lg": "0.75rem",
+            "xl": "1rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200 antialiased">
+<div class="flex h-screen overflow-hidden">
+<aside class="w-20 bg-white dark:bg-slate-900/70 flex flex-col items-center py-6 space-y-6 flex-shrink-0 border-r border-gray-200 dark:border-slate-800">
+<div class="text-primary font-bold text-2xl flex items-center justify-center">
+<svg class="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<nav class="flex flex-col items-center space-y-2">
+<a aria-label="Dashboard" class="p-3 bg-primary/10 text-primary rounded-lg" href="#">
+<span class="material-icons-outlined">dashboard</span>
+</a>
+<a aria-label="Events" class="p-3 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg" href="#">
+<span class="material-icons-outlined">event</span>
+</a>
+<a aria-label="Students" class="p-3 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg" href="#">
+<span class="material-icons-outlined">school</span>
+</a>
+<a aria-label="Analytics" class="p-3 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg" href="#">
+<span class="material-icons-outlined">analytics</span>
+</a>
+<a aria-label="Settings" class="p-3 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg" href="#">
+<span class="material-icons-outlined">settings</span>
+</a>
+</nav>
+<div class="mt-auto">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="User profile picture of a man smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyEBnrITmkeA4uWzSHWd0AiwvoNjp81B2HxBfHDCiHCHvF2eiMmd5flIZ6UJFeQIqyp-xneVZwuH2Y6pI8t1lGlkrMWb4EZoGPxkW3N1tnKjFkNQXFclDMNk2-nMoz3dexYMBpKqMAgLp7WkT-TSgzkWA1q8ZgdNtfqj38_L0AkWqmaRJF6hghBawP7Dgr5r4YJBVpVG_HE15MSrf4EaUsb8ws8jGL92XY7Ez0mBzc_VB3kMfpH96m7NZmc-4lCTpBEN5QQnVW8OA"/>
+</div>
+</aside>
+<main class="flex-1 overflow-y-auto">
+<div class="p-6 lg:p-8">
+<header class="mb-8">
+<div class="flex flex-wrap items-center justify-between gap-4">
+<div>
+<h1 class="text-2xl font-bold text-gray-900 dark:text-white">Annual Social Impact Fair 2024</h1>
+<p class="text-gray-500 dark:text-gray-400">October 26, 2024, 9:00 AM - 5:00 PM</p>
+</div>
+<div class="flex items-center gap-2 bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-3 py-1.5 rounded-full font-semibold">
+<span class="w-2 h-2 bg-red-500 rounded-full"></span>
+<span>Live</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+<div class="bg-white dark:bg-slate-900/70 p-5 rounded-xl border border-gray-200 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<div class="p-3 bg-primary/10 rounded-lg text-primary">
+<span class="material-icons-outlined !text-2xl">group</span>
+</div>
+<div>
+<p class="text-sm text-gray-500 dark:text-gray-400">Checked-in</p>
+<p class="text-2xl font-bold text-gray-900 dark:text-white">78 / 150</p>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900/70 p-5 rounded-xl border border-gray-200 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<div class="p-3 bg-yellow-500/10 rounded-lg text-yellow-500">
+<span class="material-icons-outlined !text-2xl">pending_actions</span>
+</div>
+<div>
+<p class="text-sm text-gray-500 dark:text-gray-400">Pending Verification</p>
+<p class="text-2xl font-bold text-gray-900 dark:text-white">12</p>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900/70 p-5 rounded-xl border border-gray-200 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<div class="p-3 bg-indigo-500/10 rounded-lg text-indigo-500">
+<span class="material-icons-outlined !text-2xl">schedule</span>
+</div>
+<div>
+<p class="text-sm text-gray-500 dark:text-gray-400">Total Hours Logged</p>
+<p class="text-2xl font-bold text-gray-900 dark:text-white">156h</p>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+<div class="lg:col-span-1 xl:col-span-1 bg-white dark:bg-slate-900/70 p-6 rounded-xl border border-gray-200 dark:border-slate-800 self-start">
+<h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Live Activity Feed</h2>
+<div class="space-y-4 max-h-[600px] overflow-y-auto pr-2">
+<div class="flex items-start gap-3">
+<img class="w-10 h-10 rounded-full object-cover mt-1" data-alt="Profile picture of Jane Doe" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDE965lcflzdRSkLsvFInRyewZLTIg8V25ZrCSJ4Bi_kga0WYb4-6h71v4MJgY2KVHVTd6lnKnNe5eRYya2uKBJdEoYlKHivOm09ucEZSxeN13fk2_Fd7SlBOjzTPvzSYXx3NtXTybOmZtOR3ugVYyaqdHwAqztdw_xWvl41oA8lJFmeDx95F0JrlN6Bnps0djSNTeotf5t28D66yk8neXYIBt1cO-kT1W-UO__q3-oJY9ipGNSINkk4qguzqeTag4c37GLaA7PxUw"/>
+<div>
+<p class="text-sm"><span class="font-semibold text-gray-800 dark:text-gray-100">Jane Doe</span> <span class="text-green-600 dark:text-green-400">checked in</span>.</p>
+<p class="text-xs text-gray-500 dark:text-gray-400">9:01 AM</p>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<img class="w-10 h-10 rounded-full object-cover mt-1" data-alt="Profile picture of John Smith" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7YgYO-zjshTj-oP1f3Qnq6XjNuSBlOqAQJSfNDiuTMldsanICtQohBJYq76gnaloAfxMz6t1NNpxgoQkH-ISzLjnJVfclVyGzHRGrRmuq75Hmkj923nbZPeZ7hymd9lTO0GAc8vVr780Qfa2BWtcgjyTZ6vVv_GZqX2s4KVmC5hmHaJke9JvQPaT8beGR90jJOnMu-Bw__-9FFqutiav_IF7x_RsPE89rE2IpdRY3puG7zlJXsJfPymbYszZc1dqvUNlDbHibp4M"/>
+<div>
+<p class="text-sm"><span class="font-semibold text-gray-800 dark:text-gray-100">John Smith</span> <span class="text-red-600 dark:text-red-400">checked out</span>.</p>
+<p class="text-xs text-gray-500 dark:text-gray-400">11:30 AM</p>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<img class="w-10 h-10 rounded-full object-cover mt-1" data-alt="Profile picture of Emily White" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmIVfV_IW8kFqI26VfGVby8GdKSBUR-sSBjf4LbfUNFD5rLETBaJkLV7WwgXdQOFwr_w5QEwRI_xu2Qky4Rjj8NJ_38kQ8DIeYLEH4Gv_lEmh--CcG4r5DZq2dOjE5YbqdEl1atk8ndBFk-yisvSYdcO4FK5Pc3wNEF02fjvTnCfnsd-0q7OWZI8Jnch1rz_k3e7rQMu7UbBrkkXysWjq4mzMw2gjnqC0FvOqccN153n70-prAXbqq8UUWOHf-SgXPFlsiPRgH69o"/>
+<div>
+<p class="text-sm"><span class="font-semibold text-gray-800 dark:text-gray-100">Emily White</span> <span class="text-green-600 dark:text-green-400">checked in</span>.</p>
+<p class="text-xs text-gray-500 dark:text-gray-400">11:32 AM</p>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<img class="w-10 h-10 rounded-full object-cover mt-1" data-alt="Profile picture of Michael Brown" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWhH12yMTmPjHkGnO2ZZYnNd4JU0StlrjNKo9j-NNeXtYSHgQUaj2XJp-KzZjNypeBK1UZS-YnXq0g0lCvtAVCPGoVglDqdTUtrtN5bv0edhsbR0paHVCk6vLQyJVkiSckIU4m-JtNJNp8XyAp0VQxo-P7K9L38E2U2z7JBH-r9VSyhqrnwWJJ4uCmxAEU00cZXUtZDWhAilvD10tm1oMbQXN6sqV7R79q7WCDkQGzNfA83a9FTFKFAIsl6zU7Qzm0-o86aWqVABQ"/>
+<div>
+<p class="text-sm"><span class="font-semibold text-gray-800 dark:text-gray-100">Michael Brown</span> <span class="text-green-600 dark:text-green-400">checked in</span>.</p>
+<p class="text-xs text-gray-500 dark:text-gray-400">11:35 AM</p>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<img class="w-10 h-10 rounded-full object-cover mt-1" data-alt="Profile picture of Sarah Johnson" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8SlpM05WD4xq7LwTCZ7tonGMqQgNTEMiBV7UDJoOirYZRn_C_Jgf1umnQ3nPXh3Z_5vhlxF7TDHShncsp-h7fhrOIIAmV-3_wJGQHW1Wuys-3YZPOj_VkYO2j1NVKsOzgT0JAGNeh42aNr6bfcpZ_bIqMvFecgjPElbSmtjGrSCtki8FnoxuSnrX0v3sneviwrRVbiJ37ENdEEIz3eKBlyIjVIo0pv2bZSuXtn1TI57dNVlS82QR6lJnQ43Ou05hNoTiX1vDG3oc"/>
+<div>
+<p class="text-sm"><span class="font-semibold text-gray-800 dark:text-gray-100">Sarah Johnson</span> <span class="text-red-600 dark:text-red-400">checked out</span>.</p>
+<p class="text-xs text-gray-500 dark:text-gray-400">12:05 PM</p>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-2 xl:col-span-3">
+<div class="bg-white dark:bg-slate-900/70 p-6 rounded-xl border border-gray-200 dark:border-slate-800">
+<div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
+<div class="relative w-full md:w-auto">
+<span class="material-icons-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+<input class="pl-10 w-full md:w-64 bg-background-light dark:bg-slate-800 border-gray-300 dark:border-slate-700 rounded-lg focus:ring-primary focus:border-primary" placeholder="Search by name..." type="text"/>
+</div>
+<div class="flex flex-wrap items-center gap-2">
+<button class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-slate-800 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-700">All (150)</button>
+<button class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-slate-800 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-700">Verified (55)</button>
+<button class="px-4 py-2 text-sm font-medium text-primary bg-primary/10 ring-1 ring-primary rounded-lg">Pending (12)</button>
+<button class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-slate-800 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-700">Flagged (1)</button>
+</div>
+</div>
+<div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
+<div>
+<p class="text-sm text-gray-500 dark:text-gray-400">2 items selected</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-primary rounded-lg hover:bg-blue-700 shadow-sm">
+<span class="material-icons-outlined text-base">check_circle</span>
+                    Verify Selected
+                  </button>
+<button class="flex items-center gap-2 px-4 py-2 text-sm font-semibold bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300 rounded-lg border border-gray-300 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700 shadow-sm">
+<span class="material-icons-outlined text-base">download</span>
+                    Export Data
+                  </button>
+<button class="flex items-center gap-2 px-4 py-2 text-sm font-semibold bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300 rounded-lg border border-gray-300 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700 shadow-sm">
+<span class="material-icons-outlined text-base">add</span>
+                    Manual Check-in
+                  </button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-sm text-left">
+<thead class="text-xs text-gray-500 dark:text-gray-400 uppercase bg-background-light dark:bg-slate-800/50">
+<tr>
+<th class="p-4" scope="col"><input class="rounded border-gray-400 dark:border-gray-600 bg-transparent dark:focus:ring-offset-background-dark focus:ring-primary text-primary" type="checkbox"/></th>
+<th class="py-3 px-6" scope="col">Student</th>
+<th class="py-3 px-6" scope="col">Check-in</th>
+<th class="py-3 px-6" scope="col">Check-out</th>
+<th class="py-3 px-6" scope="col">Duration</th>
+<th class="py-3 px-6" scope="col">Status</th>
+<th class="py-3 px-6" scope="col">Actions</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-gray-200 dark:border-slate-800 hover:bg-gray-50 dark:hover:bg-slate-800/50">
+<td class="p-4"><input checked="" class="rounded border-gray-400 dark:border-gray-600 bg-transparent dark:focus:ring-offset-background-dark focus:ring-primary text-primary" type="checkbox"/></td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="Profile picture of Olivia Martin" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9OinG9p1wQ-S7L_w3SQ_ssNAFgbX1_fNjA5Xu45MAumWGBOqzRhpgDpnohB5f8bRD-gT34LDMa3Uz0OgOwCI2JMiAKtOvrRoWerFhfp4Am8uncunjUcQrQ7OVIKZlh5NcvhzYFlyiJyt6fBOTVPIsTYG6Q7r1Gus_fY_teXK6esQj-3oYOKtq4dfBoKXnYUWyf5N0l-2_PqzOJdNiPPNXl2hmdj41m-gr6phKCNrqkrGnARqUYMkNAc0pnuAEF_VYy5s7WD9oOvY"/>
+<div>
+<div class="font-medium text-gray-900 dark:text-white">Olivia Martin</div>
+<div class="text-xs text-gray-500">Tech University</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">9:05 AM</td>
+<td class="py-4 px-6">12:15 PM</td>
+<td class="py-4 px-6">3h 10m</td>
+<td class="py-4 px-6"><span class="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300">Pending</span></td>
+<td class="py-4 px-6"><button class="text-primary hover:underline font-semibold">Verify</button></td>
+</tr>
+<tr class="border-b border-gray-200 dark:border-slate-800 hover:bg-gray-50 dark:hover:bg-slate-800/50">
+<td class="p-4"><input checked="" class="rounded border-gray-400 dark:border-gray-600 bg-transparent dark:focus:ring-offset-background-dark focus:ring-primary text-primary" type="checkbox"/></td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="Profile picture of Liam Garcia" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9lzs7d4FidZXIO_cggMPVAWW6r08BnGMRa5s8R6YoawDQLRRPNgRjDUm-ot-r75V5RSseBNhxASlqi1R9sklSnOpK2F7zUdftGrHeu1RVhmJQ-y8vJyTmC_ISP20nGVVusaS-QuSXUDj-ZexOfIc1R2hg9JSCKTMZmBtdXYL4HO7FbVSnPeKzY45g8-MtaxFybK8hZ6RpieJbjbJzzlaGAAjd58uhOtrlkzCVEXWupmGfmBK2-HDWzbFM_grvRhGuoBU-fR41Q3Y"/>
+<div>
+<div class="font-medium text-gray-900 dark:text-white">Liam Garcia</div>
+<div class="text-xs text-gray-500">State College</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">9:10 AM</td>
+<td class="py-4 px-6">1:30 PM</td>
+<td class="py-4 px-6">4h 20m</td>
+<td class="py-4 px-6"><span class="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300">Pending</span></td>
+<td class="py-4 px-6"><button class="text-primary hover:underline font-semibold">Verify</button></td>
+</tr>
+<tr class="border-b border-gray-200 dark:border-slate-800 hover:bg-gray-50 dark:hover:bg-slate-800/50">
+<td class="p-4"><input class="rounded border-gray-400 dark:border-gray-600 bg-transparent dark:focus:ring-offset-background-dark focus:ring-primary text-primary" type="checkbox"/></td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="Profile picture of Ava Wilson" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXWDVGUVGRdpMfX9lBDI4FGywXg9fWxpy4msDWYL_7q15w1x2wQZroBYgBeagPPSi92qBw1wnI_HpnHyKrDaCWVO4Ef4JW9dD4vdZdBYLaror2iSFknDn2I9LzUqZc2bh96rLzdFYUBfDFpiN-YATf4wZkA-DnloNgTt12gOn34oAbBEqRFkfcO95CQh72gH-LNJu1JHq7Yuh-AYC50zXMlIEkcDsaiO3qSTXa7fOcuFGQfzRGTAJ2a0hKmAg4YhIqnDKOt7U8lTI"/>
+<div>
+<div class="font-medium text-gray-900 dark:text-white">Ava Wilson</div>
+<div class="text-xs text-gray-500">Metro University</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">9:12 AM</td>
+<td class="py-4 px-6">2:00 PM</td>
+<td class="py-4 px-6">4h 48m</td>
+<td class="py-4 px-6"><span class="px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300">Flagged</span></td>
+<td class="py-4 px-6"><button class="text-primary hover:underline font-semibold">Resolve</button></td>
+</tr>
+<tr class="border-b border-gray-200 dark:border-slate-800 hover:bg-gray-50 dark:hover:bg-slate-800/50">
+<td class="p-4"><input class="rounded border-gray-400 dark:border-gray-600 bg-transparent dark:focus:ring-offset-background-dark focus:ring-primary text-primary" type="checkbox"/></td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="Profile picture of Noah Martinez" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcVB47fwgibW7f3lztq03wBB_x7S-SS5QS2n3ezD8OrdhglRpx3He_Zn5GYnDyjA5w0R8kbbCtMpmSDmyMC6jt8zIu-JPvN3q-A5t4ddqn0BbWH22140maNQ-Iy_P6gTn-tbQzYdb3LYXyHXlmikRwVLmvtWoRAuY1YQiKFbkxpAA7Hy3nzb4i-s5Ol_I3JuoBdgd1zANbadDvkrlvIBAoXHk7dU3MjpcwBudt6RyElMyRFM4WpB2G8CVB3Y1MHbuXX33J3viX0vM"/>
+<div>
+<div class="font-medium text-gray-900 dark:text-white">Noah Martinez</div>
+<div class="text-xs text-gray-500">City Institute</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">9:15 AM</td>
+<td class="py-4 px-6">1:45 PM</td>
+<td class="py-4 px-6">4h 30m</td>
+<td class="py-4 px-6"><span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300">Verified</span></td>
+<td class="py-4 px-6"><span class="material-icons-outlined text-gray-400 dark:text-gray-500">more_horiz</span></td>
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-slate-800/50">
+<td class="p-4"><input class="rounded border-gray-400 dark:border-gray-600 bg-transparent dark:focus:ring-offset-background-dark focus:ring-primary text-primary" type="checkbox"/></td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="Profile picture of Emma Lee" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAp19yWUDDd-8f6t2DkH67UO3u3lvESIZlAHCQY8Bo4OGapPWrnnJwx1XiJhfdMNuf6aeGwEw3jBh0cSOsQ5OwzZ8bX4W-hVjvPHunPi-CsVQx_74jBunZc_2sUyUqrC2HsRRNGxliGX8BKbSSWI4hx6bMKsMrBBksYOtLuDXSClx6k3WXcgdr8a87WxmxQBO71cGlGi7bGxVafnqYGoBDIRlyWDPXaJJqv3L8GaFLmR880T4GO3X7zPtICU0ZLLhpaU1Pf8KktXIo"/>
+<div>
+<div class="font-medium text-gray-900 dark:text-white">Emma Lee</div>
+<div class="text-xs text-gray-500">Tech University</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">9:01 AM</td>
+<td class="py-4 px-6 text-gray-400 dark:text-gray-500">-</td>
+<td class="py-4 px-6 text-gray-400 dark:text-gray-500">-</td>
+<td class="py-4 px-6"><span class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300">Checked-in</span></td>
+<td class="py-4 px-6"><span class="material-icons-outlined text-gray-400 dark:text-gray-500">more_horiz</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
