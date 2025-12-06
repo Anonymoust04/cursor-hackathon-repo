@@ -413,7 +413,7 @@ bun dev
 
 ### Impl 02: Projects Schema & Posting
 
-* Creates `projects` table (renamed from `jobs`) with enums, indexes (GIN on `cause_tags`)
+* Creates `projects` table with enums, indexes (GIN on `cause_tags`)
 * Projects are unique entities with unique IDs stored in profile arrays
 * Includes status tracking: `is_completed`, `is_ongoing`, `is_accepting_applications`
 * Poster-only create/edit/delete API
